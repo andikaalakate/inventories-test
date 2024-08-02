@@ -29,8 +29,8 @@
                 <i class='bx bx-search text-[20px]'></i>
             </label>
         </div>
-        <div class="h-[calc(100%-80px)] w-full flex flex-col justify-between ">
-            <ul class="p-[27px] flex flex-col gap-3 text-[18px] ">
+        <div class="lg:h-[calc(100%-80px)] h-[calc(100%-148px)] w-full flex flex-col justify-between ">
+            <ul class="p-[27px] flex flex-col gap-3 text-[18px]">
                 <li><a href="#" class="flex bg-[#3a3a3a] border-2 border-slate-50 w-full h-full py-1 px-3 rounded-xl items-center gap-2"><i
                             class='bx bx-tachometer'></i>Dashboard</a></li>
                 <li><a href="#" class="flex bg-[#3a3a3a] w-full h-full py-1 px-3 rounded-xl items-center gap-2"><i
