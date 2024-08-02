@@ -1,5 +1,17 @@
 @extends('components.layouts.admin')
 
+@section('head')
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #fff;
+        }
+    </style>
+@endsection
+
 @section('body')
     <header class="header-image text-white p-8 text-center bg-red-800">
         <h1 class="text-5xl font-bold">Admin - INVENTORIES</h1>
