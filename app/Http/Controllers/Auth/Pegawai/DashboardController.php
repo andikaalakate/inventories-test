@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth\Admin;
+namespace App\Http\Controllers\Auth\Pegawai;
 
 use App\Http\Controllers\Controller;
 use App\Models\Barang;
@@ -20,12 +20,10 @@ class DashboardController extends Controller
         $countData = [
             'barangCount' => Barang::count(),
             'kategoriCount' => KategoriBarang::count(),
-            'pegawaiCount' => Pegawai::count(),
             'siswaCount' => Siswa::count(),
-            'userCount' => User::count(),
         ];
 
-        return view('auth.admin.dashboard', array_merge(['title' => 'Dashboard'], $countData));
+        return view('auth.pegawai.dashboard', array_merge(['title' => 'Dashboard'], $countData));
     }
 
     /**

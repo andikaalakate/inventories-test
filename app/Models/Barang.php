@@ -32,7 +32,7 @@ class Barang extends Model
 
     public function kategori()
     {
-        return $this->belongsTo(KategoriBarang::class);
+        return $this->belongsTo(KategoriBarang::class, 'kategori_id');
     }
 
     public function barangIn()
@@ -40,9 +40,21 @@ class Barang extends Model
         return $this->hasMany(BarangIn::class);
     }
 
+    public function incrementJumlah($jumlah)
+    {
+        $this->jumlah += $jumlah;
+        $this->save();
+    }
+
     public function barangOut()
     {
         return $this->hasMany(BarangOut::class);
+    }
+
+    public function decrementJumlah($jumlah)
+    {
+        $this->jumlah -= $jumlah;
+        $this->save();
     }
 
     protected function casts(): array

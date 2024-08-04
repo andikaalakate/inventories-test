@@ -1,31 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Auth\Admin;
+namespace App\Http\Controllers\Auth\Pegawai;
 
 use App\Http\Controllers\Controller;
 use App\Models\Barang;
-use App\Models\KategoriBarang;
-use App\Models\Pegawai;
-use App\Models\Siswa;
-use App\Models\User;
+use App\Models\BarangOut;
 use Illuminate\Http\Request;
 
-class DashboardController extends Controller
+class BarangOutController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $countData = [
-            'barangCount' => Barang::count(),
-            'kategoriCount' => KategoriBarang::count(),
-            'pegawaiCount' => Pegawai::count(),
-            'siswaCount' => Siswa::count(),
-            'userCount' => User::count(),
-        ];
-
-        return view('auth.admin.dashboard', array_merge(['title' => 'Dashboard'], $countData));
+        //
     }
 
     /**
@@ -33,7 +22,13 @@ class DashboardController extends Controller
      */
     public function create()
     {
-        //
+        $barangs = Barang::get();
+        $barangOut = BarangOut::get();
+        return view('auth.pegawai.barang.out', [
+            'barangs' => $barangs,
+            'barangOut' => $barangOut,
+            'title' => 'Barang Keluar'
+        ]);
     }
 
     /**
@@ -41,7 +36,17 @@ class DashboardController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'barang_id' => 'required',
+            'pegawai_id' => 'required',
+            'jumlah' => 'required|integer',
+        ]);
+
+        $barangOut = BarangOut::create($request->all());
+
+        $barangOut->barang->decrementJumlah($barangOut->jumlah);
+
+        return redirect()->route('pegawai.barang-out')->with('success', 'Barang masuk berhasil dikeluarkan');
     }
 
     /**

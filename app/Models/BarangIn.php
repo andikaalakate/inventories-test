@@ -19,4 +19,20 @@ class BarangIn extends Model
             $model->{$model->getKeyName()} = (string) Str::uuid();
         });
     }
+
+    protected $fillable = [
+        'pegawai_id',
+        'barang_id',
+        'jumlah',
+    ];
+
+    public function barang()
+    {
+        return $this->belongsTo(Barang::class, 'barang_id');
+    }
+
+    public function pegawai()
+    {
+        return $this->belongsTo(Pegawai::class, 'pegawai_id');
+    }
 }

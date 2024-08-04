@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('barang_outs', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('barang_id');
+            $table->foreignId('pegawai_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->integer('jumlah');
             $table->timestamps();
 
             $table->foreign('barang_id')->references('id')->on('barangs')->onDelete('cascade')->onUpdate('cascade');

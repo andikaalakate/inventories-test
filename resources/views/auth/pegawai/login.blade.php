@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <title>Admin - {{ $title }}</title>
+    <title>Pegawai - {{ $title }}</title>
     <style>
         .shadow-button {
             box-shadow: 0.2rem 0.1rem 0px 1px #000;
@@ -43,7 +43,7 @@
             <div class="text-center mb-6">
                 <h2 class="text-lg font-semibold">Atau</h2>
             </div>
-            <form action="{{ route('admin.proseslogin') }}" method="post">
+            <form action="{{ route('pegawai.proseslogin') }}" method="post">
                 @method('POST')
                 @csrf
                 <div class="mb-4">

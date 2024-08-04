@@ -18,13 +18,13 @@
             filter: blur(5px);
         }
     </style>
-    <title>Admin - {{ $title }}</title>
+    <title>Pegawai - {{ $title }}</title>
     @yield('head')
 </head>
 
 <body class="bg-[#4e4e4e] font-[Poppins] text-white overflow-hidden" x-data="{ isOpen: false }"
     @click.away="isOpen = false">
-    @include('components.sections.navbar-admin')
+    @include('components.sections.navbar-pegawai')
     <main :class="{ 'blur': isOpen }" class=" h-[calc(100vh-80px)] w-full overflow-y-auto lg:pl-80">
         @yield('body')
     </main>

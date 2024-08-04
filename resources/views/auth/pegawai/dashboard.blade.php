@@ -1,4 +1,4 @@
-@extends('components.layouts.admin')
+@extends('components.layouts.pegawai')
 
 @section('head')
     <style>
@@ -41,25 +41,11 @@
                 <p class="text-right">Barang</p>
             </div>
             <div x-ref="items" class="bg-[#2a2a2a] p-3 rounded-lg shadow-[10px_10px_.5px_0_rgba(0,0,0,1)] grow"
-                x-bind:data-index="2" draggable="true" @dragstart="startDrag($event)" @dragend="endDrag($event)"
-                @dragover.prevent="dragOver($event)" @drop="drop($event)">
-                <p>Pegawai</p>
-                <p class="text-7xl leading-snug text-center">{{ $pegawaiCount }}</p>
-                <p class="text-right">Pegawai</p>
-            </div>
-            <div x-ref="items" class="bg-[#2a2a2a] p-3 rounded-lg shadow-[10px_10px_.5px_0_rgba(0,0,0,1)] grow"
                 x-bind:data-index="3" draggable="true" @dragstart="startDrag($event)" @dragend="endDrag($event)"
                 @dragover.prevent="dragOver($event)" @drop="drop($event)">
                 <p>Total Siswa</p>
                 <p class="text-7xl leading-snug text-center">{{ $siswaCount }}</p>
                 <p class="text-right">Siswa</p>
-            </div>
-            <div x-ref="items" class="bg-[#2a2a2a] p-3 rounded-lg shadow-[10px_10px_.5px_0_rgba(0,0,0,1)] grow"
-                x-bind:data-index="4" draggable="true" @dragstart="startDrag($event)" @dragend="endDrag($event)"
-                @dragover.prevent="dragOver($event)" @drop="drop($event)">
-                <p>Admin / Pengguna</p>
-                <p class="text-7xl leading-snug text-center">{{ $userCount }}</p>
-                <p class="text-right">Admin / Pengguna</p>
             </div>
         </div>
         <div class="flex gap-5 flex-wrap">

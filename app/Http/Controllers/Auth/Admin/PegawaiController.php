@@ -3,29 +3,16 @@
 namespace App\Http\Controllers\Auth\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Barang;
-use App\Models\KategoriBarang;
-use App\Models\Pegawai;
-use App\Models\Siswa;
-use App\Models\User;
 use Illuminate\Http\Request;
 
-class DashboardController extends Controller
+class PegawaiController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $countData = [
-            'barangCount' => Barang::count(),
-            'kategoriCount' => KategoriBarang::count(),
-            'pegawaiCount' => Pegawai::count(),
-            'siswaCount' => Siswa::count(),
-            'userCount' => User::count(),
-        ];
-
-        return view('auth.admin.dashboard', array_merge(['title' => 'Dashboard'], $countData));
+        //
     }
 
     /**

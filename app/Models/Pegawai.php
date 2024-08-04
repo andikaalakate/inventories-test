@@ -4,19 +4,46 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Str;
 
-class Pegawai extends Model
+class Pegawai extends Authenticatable
 {
     use HasFactory;
-    protected $keyType = 'string';
-    public $incrementing = false;
+    protected $guard = 'pegawai';
 
-    protected static function boot()
+    protected $keyType = 'string';
+
+    protected $fillable = [
+        'nama',
+        'username',
+        'avatar_url',
+        'email',
+        'password',
+        'jenis_kelamin',
+        'jabatan',
+        'alamat',
+        'no_hp',
+    ];
+
+    protected $hidden = [
+        'password',
+    ];
+
+    protected function casts(): array
     {
-        parent::boot();
-        static::creating(function ($model) {
-            $model->{$model->getKeyName()} = (string) Str::uuid();
-        });
+        return [
+            'password' => 'hashed',
+        ];
+    }
+
+    public function barangIn()
+    {
+        return $this->hasMany(BarangIn::class);
+    }
+
+    public function barangOut()
+    {
+        return $this->hasMany(BarangOut::class);
     }
 }

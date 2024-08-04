@@ -19,4 +19,13 @@ class KategoriBarang extends Model
             $model->{$model->getKeyName()} = (string) Str::uuid();
         });
     }
+
+    protected $fillable = [
+        'nama',
+    ];
+
+    public function barang()
+    {
+        return $this->hasMany(Barang::class, 'kategori_id');
+    }
 }

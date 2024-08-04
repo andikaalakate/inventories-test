@@ -5,7 +5,7 @@
                 class='w-[40px] h-[40px] p-1 fill-white'></box-icon>
         </div>
         <div class="p-1 pr-4 flex gap-4 items-center ">
-            <p class="text-lg flex">{{ auth()->user()->name }} | <span class="hidden md:flex"> |
+            <p class="text-lg flex">{{ auth()->user()->nama }} | <span class="hidden md:flex"> |
                     ({{ auth()->user()->email }})</span></p>
             <div class="rounded-full size-9 overflow-hidden bg-white">
                 <img src="{{ asset('user.png') }}" alt="Gambar Profile" class="size-full">
@@ -34,26 +34,21 @@
         <div class="lg:h-[calc(100%-80px)] h-[calc(100%-148px)] w-full flex flex-col justify-between ">
             <ul class="p-[27px] flex flex-col gap-3 text-[18px]">
                 <li>
-                    <a href="{{ route('dashboard') }}"
+                    <a href="{{ route('pegawai.dashboard') }}"
                         class="bg-[#3a3a3a] flex w-full h-full py-1 px-3 rounded-xl items-center gap-2 {{ request()->routeIs('dashboard') ? 'border-2 border-slate-50' : '' }}">
                         <box-icon name='tachometer' class="fill-white"></box-icon>Dashboard
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.kategori.list') }}"
+                    <a href="{{ route('pegawai.kategori.list') }}"
                         class="bg-[#3a3a3a] flex w-full h-full py-1 px-3 rounded-xl items-center gap-2 {{ request()->is('admin/kategori-barang*') ? 'border-2 border-slate-50' : '' }}">
                         <box-icon name='category-alt' class="fill-white"></box-icon>Kategori Barang
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.barang.list') }}"
+                    <a href="{{ route('pegawai.barang.list') }}"
                         class="bg-[#3a3a3a] flex w-full h-full py-1 px-3 rounded-xl items-center gap-2  {{ request()->is('admin/barang*') ? 'border-2 border-slate-50' : '' }}">
                         <box-icon name='package' class="fill-white"></box-icon>Barang
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="flex w-full h-full py-1 px-3 rounded-xl items-center gap-2 bg-[#3a3a3a]">
-                        <box-icon name='user-detail' type="solid" class="fill-white"></box-icon>Pegawai
                     </a>
                 </li>
                 <li>
@@ -61,15 +56,10 @@
                         <box-icon name='user' class="fill-white"></box-icon>Siswa
                     </a>
                 </li>
-                <li>
-                    <a href="#" class="flex w-full h-full py-1 px-3 rounded-xl items-center gap-2 bg-[#3a3a3a]">
-                        <box-icon name='user-pin' class="fill-white"></box-icon>Admin / Pengguna
-                    </a>
-                </li>
             </ul>
             <ul class="p-[27px] flex flex-col gap-3 text-[18px] ">
                 <li>
-                    <form action="{{ route('logout') }}" method="post">
+                    <form action="{{ route('pegawai.logout') }}" method="post">
                         @method('POST')
                         @csrf
                         <button type="submit"
