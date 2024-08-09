@@ -19,4 +19,16 @@ class Siswa extends Model
             $model->{$model->getKeyName()} = (string) Str::uuid();
         });
     }
+
+    protected $fillable = [
+        'nisn',
+        'nama',
+        'jenis_kelamin',
+        'kelas',
+        'jurusan',
+        'tempat_lahir',
+        'tgl_lahir',
+        'alamat',
+        'no_hp',
+    ];
 }

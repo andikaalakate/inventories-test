@@ -3,20 +3,21 @@
 namespace App\Http\Controllers\Auth\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Pegawai;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class PegawaiController extends Controller
+class AdminController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $pegawais = Pegawai::with('barangIn', 'barangOut')->get();
-        return view('auth.admin.pegawai', [
-            'title' => 'Pegawai',
-            'pegawais' => $pegawais
+        $admins = User::get();
+
+        return view('auth.admin.user', [
+            'title' => 'Admin / Pengguna',
+            'admins' => $admins
         ]);
     }
 
@@ -25,8 +26,8 @@ class PegawaiController extends Controller
      */
     public function create()
     {
-        return view('auth.admin.pegawai.tambah', [
-            'title' => 'Tambah Pegawai',
+        return view('auth.admin.user.tambah', [
+            'title' => 'Tambah Admin / Pengguna',
         ]);
     }
 
@@ -43,8 +44,8 @@ class PegawaiController extends Controller
      */
     public function show(string $id)
     {
-        return view('auth.admin.pegawai-show', [
-            'title' => 'Lihat Pegawai',
+        return view('auth.admin.user-show', [
+            'title' => 'Lihat Admin / Pengguna',
         ]);
     }
 
@@ -53,8 +54,8 @@ class PegawaiController extends Controller
      */
     public function edit(string $id)
     {
-        return view('auth.admin.pegawai.edit', [
-            'title' => 'Edit Pegawai',
+        return view('auth.admin.user.edit', [
+            'title' => 'Edit Admin / Pengguna',
         ]);
     }
 
