@@ -1,17 +1,5 @@
 @extends(Auth::guard('admin')->check() ? 'components.layouts.admin' : 'components.layouts.pegawai')
 
-@section('head')
-    <style>
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #fff;
-        }
-    </style>
-@endsection
-
 @section('body')
     <section class="flex justify-between gap-4 pb-4 pt-8 px-8 items-center">
         <h1 class="sm:text-xl md:text-2xl font-bold">List Kategori</h1>
