@@ -1,17 +1,5 @@
 @extends(Auth::guard('admin')->check() ? 'components.layouts.admin' : 'components.layouts.pegawai')
 
-@section('head')
-    <style>
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #fff;
-        }
-    </style>
-@endsection
-
 @section('body')
     <section class="flex justify-between gap-4 pb-4 pt-8 px-8 items-center">
         <h1 class="sm:text-xl md:text-2xl font-bold">List Barang</h1>
@@ -36,18 +24,18 @@
                 </div>
             </div>
             @auth('admin')
-                <a href="{{ route('admin.barang.create') }}"
-                    class="text-sm font-semibold mb-4 rounded-md border py-2 px-4 border-slate-200">Tambah</a>
+                <Link href="{{ route('admin.barang.create') }}"
+                    class="text-sm font-semibold mb-4 rounded-md border py-2 px-4 border-slate-200">Tambah</Link>
             @endauth
 
             @auth('pegawai')
                 <div class="justify-end">
-                    <a href="{{ route('pegawai.barang-in') }}"
+                    <Link href="{{ route('pegawai.barang-in') }}"
                         class="text-sm font-semibold mb-4 ml-2 rounded-md border py-2 px-4 border-slate-200">Masukkan
-                        Barang</a>
-                    <a href="{{ route('pegawai.barang-out') }}"
+                        Barang</Link>
+                    <Link href="{{ route('pegawai.barang-out') }}"
                         class="text-sm font-semibold mb-4 ml-2 rounded-md border py-2 px-4 border-slate-200">Keluarkan
-                        Barang</a>
+                        Barang</Link>
                 </div>
             @endauth
         </div>
@@ -110,20 +98,20 @@
                             <td class="py-2 px-4 text-sm text-white">
                                 <div class="justify-start items-center flex gap-4">
                                     @auth('admin')
-                                        <a href="{{ route('admin.barang.show', $barang->nama) }}"
-                                            class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">Lihat</a>
-                                        <a href="{{ route('admin.barang.edit', $barang->nama) }}"
-                                            class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">Edit</a>
-                                        <form action="{{ route('admin.barang.destroy', $barang->id) }}" method="post">
+                                        <Link href="{{ route('admin.barang.show', $barang->nama) }}"
+                                            class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">Lihat</Link>
+                                        <Link href="{{ route('admin.barang.edit', $barang->nama) }}"
+                                            class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">Edit</Link>
+                                        <x-splade-form action="{{ route('admin.barang.destroy', $barang->id) }}" method="post">
                                             @method('DELETE')
                                             @csrf
                                             <button type="submit"
                                                 class="text-[#1a1a1a] rounded-md py-2 px-3 bg-gray-50 hover:bg-[#1a1a1a] hover:text-gray-50 ml-2 transition-all duration-300">Delete</button>
-                                        </form>
+                                        </x-splade-form>
                                     @endauth
                                     @auth('pegawai')
-                                        <a href="{{ route('pegawai.barang.show', $barang->nama) }}"
-                                            class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">Lihat</a>
+                                        <Link href="{{ route('pegawai.barang.show', $barang->nama) }}"
+                                            class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">Lihat</Link>
                                     @endauth
                                 </div>
                             </td>
