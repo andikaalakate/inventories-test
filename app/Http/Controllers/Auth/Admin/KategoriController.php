@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Auth\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\KategoriBarang;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use ProtoneMedia\Splade\Facades\Toast;
 
 class KategoriController extends Controller
 {
@@ -36,19 +39,56 @@ class KategoriController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'nama' => 'required|string',
+        ], [
+            'nama.required' => 'Nama harus diisi',
+            'nama.string' => 'Nama harus berupa string',
         ]);
 
-        $kategori = new KategoriBarang($request->only([
-            'nama',
-        ]));
+        if ($validator->fails()) {
+            $errors = $validator->errors()->all();
 
-        $kategori->id = (string) Str::uuid();
+            foreach ($errors as $error) {
+                Toast::title('Error!')
+                    ->warning()
+                    ->rightTop()
+                    ->autoDismiss(5)
+                    ->message($error);
+            }
 
-        $kategori->save();
+            return redirect()->back()->withInput();
+        }
 
-        return redirect()->route('admin.kategori.list')->with('success', 'Data Kategori berhasil disimpan');
+        try {
+            DB::beginTransaction();
+
+            $kategori = new KategoriBarang($request->only([
+                'nama',
+            ]));
+
+            $kategori->id = (string) Str::uuid();
+
+            $kategori->save();
+
+            DB::commit();
+
+            Toast::title('Success!')
+                ->success()
+                ->rightTop()
+                ->autoDismiss(5)
+                ->message('Kategori Berhasil Ditambah!');
+
+            return redirect()->route('admin.kategori.list');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            Toast::title('Error!')
+                ->danger()
+                ->rightTop()
+                ->autoDismiss(5)
+                ->message('Kategori Gagal Ditambah!');
+        }
     }
 
     /**
@@ -87,14 +127,51 @@ class KategoriController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'nama' => 'required|string',
+        ], [
+            'nama.required' => 'Nama harus diisi',
+            'nama.string' => 'Nama harus berupa string',
         ]);
 
-        $kategori = KategoriBarang::find($id);
-        $kategori->update($request->all());
+        if ($validator->fails()) {
+            $errors = $validator->errors()->all();
 
-        return redirect()->route('admin.kategori.list')->with('success', 'Data Kategori berhasil diubah');
+            foreach ($errors as $error) {
+                Toast::title('Error!')
+                    ->warning()
+                    ->rightTop()
+                    ->autoDismiss(5)
+                    ->message($error);
+            }
+
+            return redirect()->back()->withInput();
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $kategori = KategoriBarang::find($id);
+            $kategori->update($request->all());
+
+            DB::commit();
+
+            Toast::title('Success!')
+                ->success()
+                ->rightTop()
+                ->autoDismiss(5)
+                ->message('Kategori Berhasil Diupdate!');
+
+            return redirect()->route('admin.kategori.list');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            Toast::title('Error!')
+                ->danger()
+                ->rightTop()
+                ->autoDismiss(5)
+                ->message('Kategori Gagal Diupdate!');
+        }
     }
 
     /**
@@ -102,9 +179,27 @@ class KategoriController extends Controller
      */
     public function destroy(string $id)
     {
-        $kategori = KategoriBarang::find($id);
-        $kategori->delete();
+        try {
+            DB::beginTransaction();
 
-        return redirect()->route('admin.kategori.list')->with('success', 'Data Kategori berhasil dihapus');
+            KategoriBarang::destroy($id);
+
+            DB::commit();
+            
+            Toast::title('Success!')
+                ->success()
+                ->rightTop()
+                ->autoDismiss(5)
+                ->message('Kategori Berhasil Dihapus!');
+            return redirect()->route('admin.kategori.list');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            Toast::title('Error!')
+                ->danger()
+                ->rightTop()
+                ->autoDismiss(5)
+                ->message('Kategori Gagal Dihapus!');
+        }
     }
 }

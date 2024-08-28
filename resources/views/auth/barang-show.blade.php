@@ -54,11 +54,13 @@
                 @php
                     $gambars = json_decode($barang->gambar);
                 @endphp
-                @foreach ($gambars as $gambar)
-                    <div class="relative">
+                <div class="flex gap-4 overflow-x-auto">
+                    @foreach ($gambars as $gambar)
+                    <div class="justify-center relative">
                         <img src="{{ Storage::url($gambar) }}" class="object-cover h-32 w-60" alt="">
                     </div>
-                @endforeach
+                    @endforeach
+                </div>
             </div>
 
             <!-- Status -->

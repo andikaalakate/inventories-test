@@ -14,6 +14,23 @@
         }
     </style>
 
+    <style>
+        .shadow-button {
+            box-shadow: 0.2rem 0.1rem 0px 1px #000;
+        }
+
+        .shadow-container {
+            box-shadow: 0.8rem 1rem 0px 1px #000;
+        }
+
+        .shadow-button:hover,
+        .shadow-button:focus,
+        .shadow-button:active {
+            box-shadow: none;
+            transform: translate(0.2rem, 0.1rem);
+        }
+    </style>
+
     @spladeHead
     @vite('resources/js/app.js')
 </head>

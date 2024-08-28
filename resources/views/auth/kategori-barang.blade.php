@@ -32,10 +32,10 @@
                 <thead>
                     <tr class="border-b bg-[#2a2a2a]">
                         <th class="py-2 px-4 text-left text-sm font-semibold text-white">No</th>
-                        <th class="py-2 px-4 text-left text-sm font-semibold text-white">Nama Kategori</th>
-                        <th class="py-2 px-4 text-center text-sm font-semibold text-white">Jumlah Barang</th>
-                        <th class="py-2 px-4 text-center text-sm font-semibold text-white">Barang Tersedia</th>
-                        <th class="py-2 px-4 text-center text-sm font-semibold text-white">Barang Habis</th>
+                        <th class="py-2 px-4 text-left text-sm font-semibold text-white">Nama</th>
+                        <th class="py-2 px-4 text-center text-sm font-semibold text-white">Jumlah</th>
+                        <th class="py-2 px-4 text-center text-sm font-semibold text-white">Tersedia</th>
+                        <th class="py-2 px-4 text-center text-sm font-semibold text-white">Habis</th>
                         <th class="py-2 px-4 text-center text-sm font-semibold text-white">Aksi</th>
                     </tr>
                 </thead>
@@ -57,7 +57,7 @@
                                         class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">Lihat</Link>
                                     <Link href="{{ route('admin.kategori.edit', $kategori->nama) }}"
                                         class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">Edit</Link>
-                                    <x-splade-form action="{{ route('admin.kategori.destroy', $kategori->id) }}" method="post">
+                                    <x-splade-form action="{{ route('admin.kategori.destroy', $kategori->id) }}" method="delete">
                                         @method('DELETE')
                                         @csrf
                                         <button type="submit"

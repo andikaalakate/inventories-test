@@ -43,13 +43,13 @@
                 </li>
                 <li>
                     <Link href="{{ route('pegawai.kategori.list') }}"
-                        class="bg-[#3a3a3a] flex w-full h-full py-1 px-3 rounded-xl items-center gap-2 {{ request()->is('admin/kategori-barang*') ? 'border-2 border-slate-50' : '' }}">
+                        class="bg-[#3a3a3a] flex w-full h-full py-1 px-3 rounded-xl items-center gap-2 {{ request()->is('pegawai/kategori-barang*') ? 'border-2 border-slate-50' : '' }}">
                     <box-icon name='category-alt' class="fill-white"></box-icon>Kategori Barang
                     </Link>
                 </li>
                 <li>
                     <Link href="{{ route('pegawai.barang.list') }}"
-                        class="bg-[#3a3a3a] flex w-full h-full py-1 px-3 rounded-xl items-center gap-2  {{ request()->is('admin/barang*') ? 'border-2 border-slate-50' : '' }}">
+                        class="bg-[#3a3a3a] flex w-full h-full py-1 px-3 rounded-xl items-center gap-2  {{ request()->is('pegawai/barang*') ? 'border-2 border-slate-50' : '' }}">
                     <box-icon name='package' class="fill-white"></box-icon>Barang
                     </Link>
                 </li>

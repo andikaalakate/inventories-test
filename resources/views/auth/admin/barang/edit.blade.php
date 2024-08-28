@@ -14,10 +14,8 @@
                 'kategori_id' => $barang->kategori_id,
                 'jumlah' => $barang->jumlah,
                 'deskripsi' => $barang->deskripsi,
-                'status' => $barang->status,
-                'gambar' => $barang->gambar,
-            ]"
-            class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                'gambar' => $gambar,
+            ]" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             @csrf
             @method('PUT')
 
@@ -59,24 +57,14 @@
 
             <label class="block col-span-1 lg:col-span-2">
                 <span class="sr-only">Choose File</span>
-                <x-splade-file name="gambar[]" multiple filepond preview />
+                <x-splade-file name="gambar[]" multiple :filepond="[ 'allowRemove' => true ]" preview />
             </label>
 
             <div class="flex flex-col">
                 <label for="status" class="text-sm font-semibold py-2 text-white">Status</label>
-                @php
-                    $statusOptions = [
-                        'tersedia' => 'Tersedia',
-                        'habis' => 'Habis',
-                    ];
-                @endphp
-                <select id="status" v-model="form.status"
-                    class="border border-[#3a3a3a] bg-[#4a4a4a] placeholder:text-gray-200 rounded-lg p-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    @foreach ($statusOptions as $value => $label)
-                        <option value="{{ $value }}" {{ $barang->status == $value ? 'selected' : '' }}>
-                            {{ $label }}</option>
-                    @endforeach
-                </select>
+                <input type="text"
+                    class="border border-[#3a3a3a] bg-[#4a4a4a] placeholder:text-gray-200 rounded-lg p-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500 capitalize"
+                    id="status" :value="form.jumlah > 0 ? 'tersedia' : 'habis'" disabled>
             </div>
 
             <div class="col-span-1 lg:col-span-2 justify-end flex">

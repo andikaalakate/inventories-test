@@ -6,8 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Barang;
 use App\Models\KategoriBarang;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use ProtoneMedia\Splade\Facades\Toast;
+use ProtoneMedia\Splade\FileUploads\ExistingFile;
+use ProtoneMedia\Splade\FileUploads\HandleSpladeFileUploads;
+use ProtoneMedia\Splade\FileUploads\SpladeFile;
 
 class BarangController extends Controller
 {
@@ -43,44 +49,98 @@ class BarangController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $messages = [
+            'nama.required' => 'Nama Barang harus diisi',
+            'nama.string' => 'Nama Barang harus berupa string',
+            'kategori_id.required' => 'Kategori harus dipilih',
+            'kategori_id.uuid' => 'Kategori harus berupa UUID',
+            'kategori_id.exists' => 'Kategori tidak ditemukan',
+            'deskripsi.required' => 'Deskripsi harus diisi',
+            'gambar*.image' => 'Gambar harus berupa gambar',
+            'gambar*.mimes' => 'Gambar harus berupa jpeg, png, jpg, gif, atau svg',
+            'gambar*.max' => 'Gambar maksimal 2 MB',
+            'jumlah.required' => 'Jumlah harus diisi',
+            'jumlah.integer' => 'Jumlah harus berupa angka',
+            'jumlah.min' => 'Jumlah minimal 1',
+            'jumlah.max' => 'Jumlah maksimal 1000',
+        ];
+
+        $validator = Validator::make($request->all(), [
             'nama' => 'required|string',
             'kategori_id' => 'required|uuid|exists:kategori_barangs,id',
             'jumlah' => 'required|integer',
             'deskripsi' => 'required|string',
             'gambar.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'status' => 'required|in:tersedia,habis'
-        ]);
+        ], $messages);
 
-        $barang = new Barang($request->only([
-            'nama',
-            'kategori_id',
-            'jumlah',
-            'deskripsi',
-            'gambar',
-            'status'
-        ]));
+        if ($validator->fails()) {
+            $errors = $validator->errors()->all();
 
-        $barang->id = (string) Str::uuid();
-
-        // Menangani gambar
-        if ($request->hasFile('gambar')) {
-            $images = $request->file('gambar');
-            $imagePaths = [];
-            // dd($images);
-
-            foreach ($images as $image) {
-                $imageName = $image->getClientOriginalName();
-                $imagePath = $image->storeAs('gambar/barang', $imageName, 'public');
-                $imagePaths[] = $imagePath;
+            foreach ($errors as $error) {
+                Toast::title('Error!')
+                    ->warning()
+                    ->rightTop()
+                    ->autoDismiss(5)
+                    ->message($error);
             }
 
-            $barang->gambar = json_encode($imagePaths); // Simpan jalur gambar sebagai JSON
+            return redirect()->back()->withInput();
         }
 
-        $barang->save();
+        try {
+            DB::beginTransaction();
 
-        return redirect()->route('admin.barang.list')->with('success', 'Data Barang berhasil disimpan');
+            $barang = new Barang($request->only([
+                'nama',
+                'kategori_id',
+                'jumlah',
+                'deskripsi',
+            ]));
+
+            $barang->id = (string) Str::uuid();
+
+            if ($request->jumlah > 0) {
+                $barang->status = 'tersedia';
+            } else {
+                $barang->status = 'habis';
+            }
+
+            // Menangani gambar
+            if ($request->hasFile('gambar')) {
+                $images = $request->file('gambar');
+                $imagePaths = [];
+
+                foreach ($images as $image) {
+                    $imageName = $image->getClientOriginalName();
+                    $imagePath = $image->storeAs('gambar/barang', $imageName, 'public');
+                    $imagePaths[] = $imagePath;
+                }
+
+                $barang->gambar = json_encode($imagePaths); // Simpan jalur gambar sebagai JSON
+            }
+
+            $barang->save();
+
+            DB::commit();
+
+            Toast::title('Success!')
+                ->success()
+                ->rightTop()
+                ->autoDismiss(5)
+                ->message('Barang ditambahkan');
+
+            return redirect()->route('admin.barang.list');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            Toast::title('Error!')
+                ->danger()
+                ->rightTop()
+                ->autoDismiss(5)
+                ->message('Barang gagal ditambahkan!' . $e->getMessage());
+
+            return redirect()->back()->withInput();
+        }
     }
 
     /**
@@ -114,49 +174,124 @@ class BarangController extends Controller
         $barangIn = $barang->barangIn;
         $barangOut = $barang->barangOut;
 
+        $gambarPaths = json_decode($barang->gambar, true);
+
+        if (is_array($gambarPaths)) {
+            foreach ($gambarPaths as $key => $path) {
+                $gambarPaths[$key] = $path;
+            }
+        }
+
+        $barang->gambar = $gambarPaths;
+
+        $gambar = ExistingFile::fromDisk('public')->get($gambarPaths);
+
         return view('auth.admin.barang.edit', [
             'title' => 'Edit Barang',
             'barang' => $barang,
+            'gambar' => $gambar,
             'kategoris' => $kategoris,
             'barangIn' => $barangIn,
-            'barangOut' => $barangOut
+            'barangOut' => $barangOut,
         ]);
     }
+
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        $request->validate([
+        HandleSpladeFileUploads::forRequest($request, 'gambar'); 
+
+        $messages = [
+            'nama.required' => 'Nama Barang harus diisi',
+            'nama.string' => 'Nama Barang harus berupa string',
+            'kategori_id.required' => 'Kategori harus dipilih',
+            'kategori_id.uuid' => 'Kategori harus berupa UUID',
+            'kategori_id.exists' => 'Kategori tidak ditemukan',
+            'deskripsi.required' => 'Deskripsi harus diisi',
+            'jumlah.required' => 'Jumlah harus diisi',
+            'jumlah.integer' => 'Jumlah harus berupa angka',
+            'jumlah.min' => 'Jumlah minimal 1',
+            'jumlah.max' => 'Jumlah maksimal 1000',
+        ];
+
+        $validator = Validator::make($request->all(), [
             'nama' => 'required|string',
             'kategori_id' => 'required|uuid|exists:kategori_barangs,id',
             'jumlah' => 'required|integer',
             'deskripsi' => 'required|string',
-            'gambar.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'status' => 'required|in:tersedia,habis'
-        ]);
+            'gambar.*' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ], $messages);
 
-        $barang = Barang::find($id);
+        if ($validator->fails()) {
+            $errors = $validator->errors()->all();
 
-        // Menangani gambar
-        if ($request->hasFile('gambar')) {
-            $existingImages = json_decode($barang->gambar, true) ?? [];
-            $newImages = $request->file('gambar');
-            $imagePaths = $existingImages;
-
-            foreach ($newImages as $image) {
-                $imageName = $image->getClientOriginalName();
-                $imagePath = $image->storeAs('gambar/barang', $imageName, 'public');
-                $imagePaths[] = $imagePath;
+            foreach ($errors as $error) {
+                Toast::title('Error!')
+                ->warning()
+                    ->rightTop()
+                    ->autoDismiss(5)
+                    ->message($error);
             }
 
-            $barang->gambar = json_encode($imagePaths); // Simpan jalur gambar sebagai JSON
+            return redirect()->back()->withInput();
         }
 
-        $barang->update($request->except('gambar')); // Update semua field kecuali gambar
+        try {
+            DB::beginTransaction();
 
-        return redirect()->route('admin.barang.list')->with('success', 'Data Barang berhasil disimpan');
+            $barang = Barang::findOrFail($id);
+
+            $barang->status = $request->input('jumlah') > 0 ? 'tersedia' : 'habis';
+
+            $existingImages = json_decode($barang->gambar, true) ?? [];
+
+            $updatedImages = [];
+            if ($request->has('gambar_existing')) {
+                $existingImagesFromRequest = $request->input('gambar_existing', []);
+                foreach ($existingImagesFromRequest as $key => $value) {
+                    if (isset($existingImages[$key])) {
+                        $updatedImages[] = $existingImages[$key];
+                    }
+                }
+            }
+
+            $newImages = [];
+            if ($request->hasFile('gambar')) {
+                foreach ($request->file('gambar') as $image) {
+                    $imageName = $image->getClientOriginalName();
+                    $imagePath = $image->storeAs('gambar/barang', $imageName, 'public');
+                    $newImages[] = $imagePath;
+                }
+            }
+
+            $finalImages = array_merge($updatedImages, $newImages);
+            $barang->gambar = json_encode($finalImages);
+
+            $barang->update($request->except('gambar_existing', 'gambar_order', 'gambar'));
+
+            DB::commit();
+
+            Toast::title('Success!')
+            ->success()
+                ->rightTop()
+                ->autoDismiss(5)
+                ->message('Barang berhasil diperbarui');
+
+            return redirect()->route('admin.barang.list');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            Toast::title('Error!')
+            ->danger()
+                ->rightTop()
+                ->autoDismiss(5)
+                ->message('Barang gagal diperbarui: ' . $e->getMessage());
+
+            return redirect()->back()->withInput();
+        }
     }
 
     /**
@@ -164,34 +299,62 @@ class BarangController extends Controller
      */
     public function destroy(string $id)
     {
-        $barang = Barang::find($id);
-        $barang->delete();
+        try {
+            DB::beginTransaction();
 
-        return redirect()->route('admin.barang.list')->with('success', 'Data Barang berhasil dihapus');
+            Barang::destroy($id);
+
+            DB::commit();
+
+            Toast::title('Success!')
+                ->success()
+                ->rightTop()
+                ->autoDismiss(5)
+                ->message('Barang Berhasil Dihapus!');
+
+            return redirect()->back();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            Toast::title('Error!')
+                ->danger()
+                ->rightTop()
+                ->autoDismiss(5)
+                ->message('Barang Gagal Dihapus!');
+
+            return redirect()->back();
+        }
     }
 
     public function deleteImage($barangId, $index)
     {
-        $barang = Barang::findOrFail($barangId);
+        try {
+            DB::beginTransaction();
 
-        // Decode existing images
-        $images = json_decode($barang->gambar, true);
+            $barang = Barang::findOrFail($barangId);
 
-        if (isset($images[$index])) {
-            // Delete the image from storage
-            Storage::disk('public')->delete($images[$index]);
+            // Decode existing images
+            $images = json_decode($barang->gambar, true);
 
-            // Remove the image path from the array
-            unset($images[$index]);
+            if (isset($images[$index])) {
+                // Delete the image from storage
+                Storage::disk('public')->delete($images[$index]);
 
-            // Save updated image paths to the database
-            $barang->gambar = json_encode(array_values($images));
-            $barang->save();
+                // Remove the image path from the array
+                unset($images[$index]);
 
-            return response()->json(['success' => true]);
+                // Save updated image paths to the database
+                $barang->gambar = json_encode(array_values($images));
+                $barang->save();
+
+                DB::commit();
+
+                return response()->json(['success' => true]);
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
-
-        return response()->json(['success' => false], 404);
     }
-
 }

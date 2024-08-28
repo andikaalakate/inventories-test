@@ -1,18 +1,14 @@
 @extends('components.layouts.pegawai')
 
-@section('head')
-    
-@endsection
-
 @section('body')
     <section class="flex justify-between items-center pb-4 pt-8 px-8">
         <h1 class="text-xl font-bold">Keluarkan Barang</h1>
-        <a href="{{ route('pegawai.barang.list') }}"
-            class="text-sm font-bold rounded-md border-2 py-2 px-4 border-slate-200">Kembali</a>
+        <Link href="{{ route('pegawai.barang.list') }}"
+            class="text-sm font-bold rounded-md border-2 py-2 px-4 border-slate-200">Kembali</Link>
     </section>
 
     <section class="p-6 my-4 mx-8 bg-[#2a2a2a] rounded-lg shadow-md">
-        <form action="{{ route('pegawai.barang-out.store') }}" method="post" enctype="multipart/form-data"
+        <x-splade-form action="{{ route('pegawai.barang-out.store') }}" method="post" enctype="multipart/form-data"
             class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             @csrf
             @method('POST')
@@ -46,7 +42,7 @@
                     Submit
                 </button>
             </div>
-        </form>
+        </x-splade-form>
     </section>
 
     <section class="p-6 my-4 mx-8 bg-[#2a2a2a] rounded-lg shadow-md">
@@ -73,7 +69,8 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="py-20 px-4 text-lg text-white text-center">Tidak ada barang yang pernah Anda keluarkan</td>
+                            <td colspan="4" class="py-20 px-4 text-lg text-white text-center">Tidak ada barang yang
+                                pernah Anda keluarkan</td>
                         </tr>
                     @endforelse
                 </tbody>

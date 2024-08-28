@@ -102,7 +102,7 @@
                                             class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">Lihat</Link>
                                         <Link href="{{ route('admin.barang.edit', $barang->nama) }}"
                                             class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">Edit</Link>
-                                        <x-splade-form action="{{ route('admin.barang.destroy', $barang->id) }}" method="post">
+                                        <x-splade-form action="{{ route('admin.barang.destroy', $barang->id) }}" method="DELETE">
                                             @method('DELETE')
                                             @csrf
                                             <button type="submit"

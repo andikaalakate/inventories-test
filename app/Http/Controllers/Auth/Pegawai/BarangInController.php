@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Barang;
 use App\Models\BarangIn;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use ProtoneMedia\Splade\Facades\Toast;
 
 class BarangInController extends Controller
 {
@@ -36,17 +39,50 @@ class BarangInController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'barang_id' => 'required',
-            'pegawai_id' => 'required',
+        $messages = [
+            'barang_id.required' => 'Barang harus dipilih',
+            'jumlah.required' => 'Jumlah harus diisi',
+        ];
+
+        $validator = Validator::make($request->all(),[
+            'barang_id' => 'required|exists:barangs,id',
             'jumlah' => 'required|integer',
-        ]);
+        ], $messages);
 
-        $barangIn = BarangIn::create($request->all());
+        if ($validator->fails()) {
+            $errors = $validator->errors()->all();
 
-        $barangIn->barang->incrementJumlah($barangIn->jumlah);
+            foreach ($errors as $error) {
+                Toast::title('Error!')
+                    ->warning()
+                    ->rightTop()
+                    ->autoDismiss(5)
+                    ->message($error);
+            }
 
-        return redirect()->route('pegawai.barang-in')->with('success', 'Barang masuk berhasil ditambahkan');
+            return redirect()->back()->withInput();
+        }
+
+        try {
+            DB::beginTransaction();
+            
+            $barangIn = BarangIn::create($request->all());
+    
+            $barangIn->barang->incrementJumlah($barangIn->jumlah);
+
+            DB::commit();
+
+            Toast::title('Success!')
+                ->success()
+                ->rightTop()
+                ->autoDismiss(5)
+                ->message('Barang masuk ditambahkan');
+    
+            return redirect()->route('pegawai.barang-in');
+        } catch (\Exception $e) {
+            
+        }
+
     }
 
     /**

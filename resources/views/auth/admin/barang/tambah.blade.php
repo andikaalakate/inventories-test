@@ -9,6 +9,7 @@
 
     <section class="p-6 my-4 mx-8 bg-[#2a2a2a] rounded-lg shadow-md">
         <x-splade-form action="{{ route('admin.barang.store') }}" method="post" enctype="multipart/form-data"
+        defaults="{'gambar': []}"
             class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             @csrf
             @method('POST')
@@ -24,13 +25,9 @@
             <!-- Kategori -->
             <div class="flex flex-col">
                 <label for="kategori" class="text-sm font-semibold py-2 text-white">Kategori</label>
-                <select v-model="form.kategori_id" id="kategori" required
-                    class="border border-[#3a3a3a] bg-[#4a4a4a] placeholder:text-gray-200 rounded-lg p-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option disabled selected>Pilih Kategori</option>
-                    @foreach ($kategoris as $kategori)
-                        <option value="{{ $kategori->id }}">{{ $kategori->nama }}</option>
-                    @endforeach
-                </select>
+                <x-splade-select v-model="form.kategori_id" id="kategori" required
+                    :options="$kategoris" option-value="id" option-label="nama" placeholder="Pilih Kategori">
+                </x-splade-select>
             </div>
 
             <!-- Jumlah -->
@@ -38,7 +35,7 @@
                 <label for="jumlah" class="text-sm font-semibold py-2 text-white">Jumlah</label>
                 <input required
                     class="border border-[#3a3a3a] bg-[#4a4a4a] placeholder:text-gray-200 rounded-lg p-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    type="number" id="jumlah" v-model="form.jumlah" placeholder="Masukkan jumlah barang">
+                    type="number" id="jumlah" min="0" step="1" max="100" value="1" v-model="form.jumlah" placeholder="Masukkan jumlah barang">
             </div>
 
             <!-- Deskripsi -->
@@ -51,19 +48,14 @@
 
             <!-- Gambar -->
             <div class="flex flex-col">
-                <label for="gambar" class="text-sm font-semibold py-2 text-white">Gambar</label>
-                <x-splade-file name="gambar[]" id="gambar" multiple filepond preview />
+                <x-splade-file label="Gambar" name="gambar[]" id="gambar" multiple filepond preview />
             </label>
             </div>
 
             <!-- Status -->
             <div class="flex flex-col">
                 <label for="status" class="text-sm font-semibold py-2 text-white">Status</label>
-                <select id="status" v-model="form.status" required
-                    class="border border-[#3a3a3a] bg-[#4a4a4a] placeholder:text-gray-200 rounded-lg p-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="tersedia">Tersedia</option>
-                    <option value="habis">Habis</option>
-                </select>
+                <input type="text" class="border border-[#3a3a3a] bg-[#4a4a4a] placeholder:text-gray-200 rounded-lg p-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500 capitalize" :value="form.jumlah > 0 ? 'Tersedia' : 'Habis'" />
             </div>
 
             <!-- Submit Button -->

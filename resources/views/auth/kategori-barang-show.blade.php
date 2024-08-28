@@ -2,7 +2,7 @@
 
 @section('body')
     <section class="flex justify-between items-center pb-4 pt-8 px-8">
-        <h1 class="text-xl font-bold">Edit Kategori</h1>
+        <h1 class="text-xl font-bold">Lihat Kategori</h1>
         <Link href="{{ route(auth()->guard('admin')->check() ? 'admin.kategori.list' : 'pegawai.kategori.list') }}" class="text-sm font-bold rounded-md border-2 py-2 px-4 border-slate-200">Kembali</Link>
     </section>
 
