@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Pegawai;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use ProtoneMedia\Splade\Facades\Toast;
 
 class PegawaiController extends Controller
 {
@@ -35,7 +37,51 @@ class PegawaiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $messages = [
+            'username.required' => 'Username harus diisi',
+            'username.string' => 'Username harus berupa string',
+            'username.unique' => 'Username sudah ada',
+            'nama.required' => 'Nama harus diisi',
+            'nama.string' => 'Nama harus berupa string',
+            'jenis_kelamin.required' => 'Jenis kelamin harus diisi',
+            'email.required' => 'Email harus diisi',
+            'email.email' => 'Email harus diisi dengan email',
+            'email.unique' => 'Email telah dipakai',
+            'jabatan.required' => 'Jabatan harus diisi',
+            'alamat.required' => 'Alamat harus diisi',
+            'alamat.string' => 'Alamat harus berupa string',
+            'no_hp.required' => 'No. HP harus diisi',
+            'no_hp.max' => 'No. HP maksimal 18 karakter',
+            'no_hp.unique' => 'No. HP sudah ada',
+            'no_hp.regex' => 'No. HP harus berupa angka',
+            'no_hp.numeric' => 'No. HP harus berupa angka',
+            'no_hp.min' => 'No. HP minimal 11 karakter',
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'username' => 'required|string|unique:pegawais',
+            'nama' => 'required|string',
+            'email' => 'required|email|unique:pegawais,email',
+            'password' => 'required|string',
+            'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
+            'jabatan' => 'required|in:Pengurus Lab,Tata Usaha,Kepala Sekolah,Wakil Kepala Sekolah,Kepala Jurusan,Guru,Wali Kelas',
+            'alamat' => 'required|string|max:255|min:3',
+            'no_hp' => 'required|string|max:18|min:11|regex:/^[0-9]*$/|unique:siswas',
+        ], $messages);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors()->all();
+
+            foreach ($errors as $error) {
+                Toast::title('Error!')
+                    ->warning()
+                    ->rightTop()
+                    ->autoDismiss(5)
+                    ->message($error);
+            }
+
+            return redirect()->back()->withInput();
+        }
     }
 
     /**

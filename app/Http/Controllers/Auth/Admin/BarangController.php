@@ -107,16 +107,18 @@ class BarangController extends Controller
 
             // Menangani gambar
             if ($request->hasFile('gambar')) {
-                $images = $request->file('gambar');
-                $imagePaths = [];
+                $image = $request->file('gambar');
+                // $imagePaths = [];
 
-                foreach ($images as $image) {
+                // foreach ($images as $image) {
                     $imageName = $image->getClientOriginalName();
                     $imagePath = $image->storeAs('gambar/barang', $imageName, 'public');
-                    $imagePaths[] = $imagePath;
-                }
+                //     $imagePaths[] = $imagePath;
+                // }
 
-                $barang->gambar = json_encode($imagePaths); // Simpan jalur gambar sebagai JSON
+                $barang->gambar = $imagePath;
+
+                // $barang->gambar = json_encode($imagePaths); // Simpan jalur gambar sebagai JSON
             }
 
             $barang->save();

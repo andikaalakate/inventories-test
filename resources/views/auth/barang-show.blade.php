@@ -126,7 +126,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3" class="py-20 px-4 text-lg text-white text-center">Tidak ada barang masuk
+                                    <td colspan="4" class="py-20 px-4 text-lg text-white text-center">Tidak ada barang masuk
                                     </td>
                                 </tr>
                             @endforelse
@@ -164,7 +164,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3" class="py-20 px-4 text-lg text-white text-center">Tidak ada barang masuk
+                                    <td colspan="4" class="py-20 px-4 text-lg text-white text-center">Tidak ada barang masuk
                                     </td>
                                 </tr>
                             @endforelse
@@ -178,7 +178,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3" class="py-20 px-4 text-lg text-white text-center">Tidak ada barang keluar
+                                    <td colspan="4" class="py-20 px-4 text-lg text-white text-center">Tidak ada barang keluar
                                     </td>
                                 </tr>
                             @endforelse

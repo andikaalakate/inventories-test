@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use ProtoneMedia\Splade\Facades\Toast;
 
 class AuthController extends Controller
 {
@@ -39,9 +40,19 @@ class AuthController extends Controller
 
         if (Auth::guard('pegawai')->attempt($credentials)) {
             $request->session()->regenerate();
+            Toast::title('Success!')
+                ->success()
+                ->rightTop()
+                ->autoDismiss(5)
+                ->message('Berhasil Masuk!');
             return redirect()->intended('pegawai/');
         } else {
-            return redirect()->intended('pegawai/login')->with('warning', 'Email / Password Salah!');
+            Toast::title('Error!')
+                ->warning()
+                ->rightTop()
+                ->autoDismiss(5)
+                ->message('Email / Password Salah!');
+            return redirect()->intended('pegawai/login');
         }
     }
 
@@ -54,6 +65,11 @@ class AuthController extends Controller
             Auth::guard('pegawai')->logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
+            Toast::title('Success!')
+                ->success()
+                ->rightTop()
+                ->autoDismiss(5)
+                ->message('Berhasil Keluar!');
         }
 
         return redirect()->intended('pegawai/login');
@@ -71,9 +87,19 @@ class AuthController extends Controller
 
         if (Auth::guard('admin')->attempt($credentials)) {
             $request->session()->regenerate();
+            Toast::title('Success!')
+                ->success()
+                ->rightTop()
+                ->autoDismiss(5)
+                ->message('Berhasil Masuk!');
             return redirect()->intended('admin/');
         } else {
-            return redirect()->intended('admin/login')->with('warning', 'Email / Password Salah!');
+            Toast::title('Error!')
+                ->warning()
+                ->rightTop()
+                ->autoDismiss(5)
+                ->message('Email / Password Salah!');
+            return redirect()->intended('admin/login');
         }
     }
 
@@ -86,6 +112,11 @@ class AuthController extends Controller
             Auth::guard('admin')->logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
+            Toast::title('Success!')
+                ->success()
+                ->rightTop()
+                ->autoDismiss(5)
+                ->message('Berhasil Keluar!');
         }
 
         return redirect()->intended('admin/login');

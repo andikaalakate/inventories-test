@@ -20,7 +20,7 @@
     </label>
     <aside
         :class="{ 'left-0 sm:shadow-[10px_10px_.5px_0_rgba(0,0,0,0.75)]': navigation.isOpen, '-left-full': !navigation.isOpen }"
-        class="duration-500 z-50 h-screen w-full md:w-80 bg-[#2a2a2a] lg:shadow-none fixed lg:left-0 top-0">
+        class="duration-500 z-10 h-screen w-full md:w-80 bg-[#2a2a2a] lg:shadow-none fixed lg:left-0 top-0">
         <div class="flex justify-between items-center h-20 px-3 lg:justify-center">
             <h1 class="text-white text-3xl text-center pl-4">Inventory</h1>
             <box-icon name='x' v-on:click="navigation.isOpen = false"
@@ -37,7 +37,7 @@
             <ul class="p-[27px] flex flex-col gap-3 text-[18px]">
                 <li>
                     <Link href="{{ route('pegawai.dashboard') }}"
-                        class="bg-[#3a3a3a] flex w-full h-full py-1 px-3 rounded-xl items-center gap-2 {{ request()->routeIs('dashboard') ? 'border-2 border-slate-50' : '' }}">
+                        class="bg-[#3a3a3a] flex w-full h-full py-1 px-3 rounded-xl items-center gap-2 {{ request()->is('pegawai') ? 'border-2 border-slate-50' : '' }}">
                     <box-icon name='tachometer' class="fill-white"></box-icon>Dashboard
                     </Link>
                 </li>
@@ -53,16 +53,12 @@
                     <box-icon name='package' class="fill-white"></box-icon>Barang
                     </Link>
                 </li>
-                <li>
-                    <Link href="#"
-                        class="flex w-full h-full py-1 px-3 rounded-xl items-center gap-2 bg-[#3a3a3a]">
-                    <box-icon name='user' class="fill-white"></box-icon>Siswa
-                    </Link>
-                </li>
             </ul>
             <ul class="p-[27px] flex flex-col gap-3 text-[18px] ">
                 <li>
-                    <x-splade-form action="{{ route('pegawai.logout') }}" method="post">
+                    <x-splade-form action="{{ route('pegawai.logout') }}" method="post" confirm="Keluar?"
+                            confirm-text="Apa kamu yakin?" confirm-button="Ya, aku ingin keluar dari akunku!"
+                            cancel-button="Tidak">
                         @method('POST')
                         @csrf
                         <button type="submit"

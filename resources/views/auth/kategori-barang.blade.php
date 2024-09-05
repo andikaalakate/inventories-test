@@ -23,8 +23,10 @@
                     </svg>
                 </div>
             </div>
-            <Link href="{{ route('admin.kategori.create') }}"
-                class="text-sm font-semibold mb-4 rounded-md border py-2 px-4 border-slate-200">Tambah</Link>
+            @auth('admin')
+                <Link href="{{ route('admin.kategori.create') }}"
+                    class="text-sm font-semibold mb-4 rounded-md border py-2 px-4 border-slate-200">Tambah</Link>
+            @endauth
         </div>
         <div class="overflow-x-auto">
             <table
@@ -54,10 +56,13 @@
                             <td class="py-2 px-4 text-sm text-white flex justify-center gap-4 items-center">
                                 @auth('admin')
                                     <Link href="{{ route('admin.kategori.show', $kategori->nama) }}"
-                                        class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">Lihat</Link>
+                                        class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">
+                                    Lihat</Link>
                                     <Link href="{{ route('admin.kategori.edit', $kategori->nama) }}"
-                                        class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">Edit</Link>
-                                    <x-splade-form action="{{ route('admin.kategori.destroy', $kategori->id) }}" method="delete">
+                                        class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">
+                                    Edit</Link>
+                                    <x-splade-form action="{{ route('admin.kategori.destroy', $kategori->id) }}"
+                                        method="delete">
                                         @method('DELETE')
                                         @csrf
                                         <button type="submit"
@@ -66,7 +71,8 @@
                                 @endauth
                                 @auth('pegawai')
                                     <Link href="{{ route('pegawai.kategori.show', $kategori->nama) }}"
-                                        class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">Lihat</Link>
+                                        class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">
+                                    Lihat</Link>
                                 @endauth
                             </td>
                         </tr>

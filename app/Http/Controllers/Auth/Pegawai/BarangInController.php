@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Barang;
 use App\Models\BarangIn;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use ProtoneMedia\Splade\Facades\Toast;
@@ -66,10 +67,16 @@ class BarangInController extends Controller
         try {
             DB::beginTransaction();
             
-            $barangIn = BarangIn::create($request->all());
+            $barangIn = new BarangIn($request->only([
+                'barang_id',
+                'jumlah'
+            ]));
+
+            $barangIn->pegawai_id = Auth::user()->id;
     
             $barangIn->barang->incrementJumlah($barangIn->jumlah);
 
+            $barangIn->save();
             DB::commit();
 
             Toast::title('Success!')
@@ -80,9 +87,16 @@ class BarangInController extends Controller
     
             return redirect()->route('pegawai.barang-in');
         } catch (\Exception $e) {
-            
-        }
+            DB::rollBack();
 
+            Toast::title('Error!')
+            ->danger()
+                ->rightTop()
+                ->autoDismiss(5)
+                ->message('Barang gagal dimasukkan: ' . $e->getMessage());
+
+            return redirect()->back()->withInput();
+        }
     }
 
     /**

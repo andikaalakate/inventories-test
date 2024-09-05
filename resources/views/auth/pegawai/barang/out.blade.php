@@ -13,18 +13,12 @@
             @csrf
             @method('POST')
 
-            <input type="hidden" name="pegawai_id" value="{{ auth()->user()->id }}">
-
             <!-- Barang -->
             <div class="flex flex-col">
                 <label for="barang" class="text-sm font-semibold py-2 text-white">Barang</label>
-                <select name="barang_id" id="barang" required
-                    class="border border-[#3a3a3a] bg-[#4a4a4a] placeholder:text-gray-200 rounded-lg p-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option disabled selected>Pilih Barang</option>
-                    @foreach ($barangs as $barang)
-                        <option value="{{ $barang->id }}">{{ $barang->nama }}</option>
-                    @endforeach
-                </select>
+                <x-splade-select v-model="form.barang_id" id="barang" required
+                    :options="$barangs" option-value="id" option-label="nama" placeholder="Pilih Barang">
+                </x-splade-select>
             </div>
 
             <!-- Jumlah -->
@@ -32,7 +26,7 @@
                 <label for="jumlah" class="text-sm font-semibold py-2 text-white">Jumlah</label>
                 <input required
                     class="border border-[#3a3a3a] bg-[#4a4a4a] placeholder:text-gray-200 rounded-lg p-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    type="number" id="jumlah" name="jumlah" placeholder="Masukkan jumlah">
+                    type="number" id="jumlah" v-model="form.jumlah" placeholder="Masukkan jumlah">
             </div>
 
             <!-- Submit Button -->

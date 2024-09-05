@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Barang;
 use App\Models\BarangOut;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use ProtoneMedia\Splade\Facades\Toast;
 
 class BarangOutController extends Controller
 {
@@ -36,17 +40,63 @@ class BarangOutController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'barang_id' => 'required',
-            'pegawai_id' => 'required',
+        $messages = [
+            'barang_id.required' => 'Barang harus dipilih',
+            'jumlah.required' => 'Jumlah harus diisi',
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'barang_id' => 'required|exists:barangs,id',
             'jumlah' => 'required|integer',
-        ]);
+        ], $messages);
 
-        $barangOut = BarangOut::create($request->all());
+        if ($validator->fails()) {
+            $errors = $validator->errors()->all();
 
-        $barangOut->barang->decrementJumlah($barangOut->jumlah);
+            foreach ($errors as $error) {
+                Toast::title('Error!')
+                    ->warning()
+                    ->rightTop()
+                    ->autoDismiss(5)
+                    ->message($error);
+            }
 
-        return redirect()->route('pegawai.barang-out')->with('success', 'Barang masuk berhasil dikeluarkan');
+            return redirect()->back()->withInput();
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $barangOut = new BarangOut($request->only([
+                'barang_id',
+                'jumlah'
+            ]));
+
+            $barangOut->pegawai_id = Auth::user()->id;
+
+            $barangOut->barang->decrementJumlah($barangOut->jumlah);
+
+            $barangOut->save();
+            DB::commit();
+
+            Toast::title('Success!')
+            ->success()
+                ->rightTop()
+                ->autoDismiss(5)
+                ->message('Barang dikeluarkan');
+
+            return redirect()->route('pegawai.barang-in');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            Toast::title('Error!')
+                ->danger()
+                ->rightTop()
+                ->autoDismiss(5)
+                ->message('Barang gagal dikeluarkan: ' . $e->getMessage());
+
+            return redirect()->back()->withInput();
+        }
     }
 
     /**
