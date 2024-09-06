@@ -129,20 +129,44 @@ class SiswaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $nama)
     {
+        $siswa = Siswa::where('nama', $nama)->first();
+
+        if (!$siswa) {
+            Toast::title('Error!')
+                ->warning()
+                ->rightTop()
+                ->autoDismiss(5)
+                ->message('Siswa Tidak Ditemukan!');
+            return redirect()->route('admin.siswa.list');
+        }
+        
         return view('auth.admin.siswa-show', [
             'title' => 'Lihat Siswa',
+            'siswa' => $siswa
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $nama)
     {
+        $siswa = Siswa::where('nama', $nama)->first();
+
+        if (!$siswa) {
+            Toast::title('Error!')
+                ->warning()
+                ->rightTop()
+                ->autoDismiss(5)
+                ->message('Siswa Tidak Ditemukan!');
+            return redirect()->route('admin.siswa.list');
+        }
+        
         return view('auth.admin.siswa.edit', [
             'title' => 'Edit Siswa',
+            'siswa' => $siswa,
         ]);
     }
 
@@ -154,7 +178,7 @@ class SiswaController extends Controller
         $messages = [
             'nisn.required' => 'NISN harus diisi',
             'nisn.string' => 'NISN harus berupa string',
-            'nisn.unique' => 'NISN sudah ada',
+            'nisn.exists' => 'NISN tidak ditemukan',
             'nama.required' => 'Nama harus diisi',
             'nama.string' => 'Nama harus berupa string',
             'jenis_kelamin.required' => 'Jenis kelamin harus diisi',
@@ -168,7 +192,6 @@ class SiswaController extends Controller
             'no_hp.required' => 'No. HP harus diisi',
             'no_hp.string' => 'No. HP harus berupa string',
             'no_hp.max' => 'No. HP maksimal 18 karakter',
-            'no_hp.unique' => 'No. HP sudah ada',
             'no_hp.regex' => 'No. HP harus berupa angka',
             'no_hp.numeric' => 'No. HP harus berupa angka',
             'no_hp.min' => 'No. HP minimal 11 karakter',
@@ -177,7 +200,7 @@ class SiswaController extends Controller
         ];
 
         $validator = Validator::make($request->all(), [
-            'nisn' => 'required|string|unique:siswas',
+            'nisn' => 'required|string|exists:siswas,nisn',
             'nama' => 'required|string',
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
             'kelas' => 'required|in:X,XI,XII',
@@ -185,7 +208,7 @@ class SiswaController extends Controller
             'tempat_lahir' => 'required|string|max:255|min:3|regex:/^[a-zA-Z\s]*$/',
             'tgl_lahir' => 'required|date|before:today|after:2003-01-01',
             'alamat' => 'required|string|max:255|min:3',
-            'no_hp' => 'required|string|max:18|min:11|regex:/^[0-9]*$/|unique:siswas',
+            'no_hp' => 'required|string|max:18|min:11|regex:/^[0-9]*$/',
         ], $messages);
 
         if ($validator->fails()) {
