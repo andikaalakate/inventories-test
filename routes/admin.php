@@ -34,7 +34,6 @@ Route::prefix('admin')->middleware(['auth:admin', 'auth.session'])->group(functi
     Route::resource('barang', BarangController::class, [
         'names' => [
             'index' => 'admin.barang.list',
-            'show' => 'admin.barang.show',
             'store' => 'admin.barang.store',
             'create' => 'admin.barang.create',
             'edit' => 'admin.barang.edit',
@@ -42,6 +41,7 @@ Route::prefix('admin')->middleware(['auth:admin', 'auth.session'])->group(functi
             'destroy' => 'admin.barang.destroy',
         ],
     ]);
+    Route::get('/barang/{barang}/lihat', [BarangController::class, 'show'])->name('admin.barang.show');
 
     // Pegawai
     Route::resource('pegawai', PegawaiController::class, [

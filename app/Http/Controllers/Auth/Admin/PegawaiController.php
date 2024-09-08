@@ -15,7 +15,9 @@ class PegawaiController extends Controller
      */
     public function index()
     {
-        $pegawais = Pegawai::with('barangIn', 'barangOut')->get();
+        $pegawaisQuery = Pegawai::with('barangIn', 'barangOut')->latest();
+        $pegawais = $pegawaisQuery->paginate(10);
+        
         return view('auth.admin.pegawai', [
             'title' => 'Pegawai',
             'pegawais' => $pegawais
@@ -87,8 +89,9 @@ class PegawaiController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $nama)
     {
+        $pegawai = Pegawai::where('nama', $nama)->first();
         return view('auth.admin.pegawai-show', [
             'title' => 'Lihat Pegawai',
         ]);

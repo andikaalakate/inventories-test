@@ -57,7 +57,7 @@
 
             <label class="block col-span-1 lg:col-span-2">
                 <span class="sr-only">Choose File</span>
-                <x-splade-file name="gambar[]" multiple :filepond="[ 'allowRemove' => true ]" preview />
+                <x-splade-file name="gambar[]" multiple :filepond="['allowRemove' => true]" preview />
             </label>
 
             <div class="flex flex-col">
@@ -83,33 +83,47 @@
             <div class="flex justify-center items-center py-2">
                 <h1 class="text-xl font-semibold mb-4 text-center">Barang Masuk</h1>
             </div>
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto rounded-md">
                 <table
-                    class="min-w-full mb-4 sm:table-fixed md:table-auto w-full border-collapse bg-[#3a3a3a] border border-gray-300 rounded-lg shadow-sm">
-                    <thead>
-                        <tr class="border-b bg-[#2a2a2a]">
+                    class="min-w-full bg-gray-300 h-full mb-4 border border-gray-300 shadow-sm rounded-lg overflow-hidden">
+                    <thead class="bg-[#1a1a1a]">
+                        <tr class="border-b">
                             <th class="py-2 px-4 text-left text-sm font-semibold text-white">No</th>
                             <th class="py-2 px-4 text-left text-sm font-semibold text-white">Pegawai</th>
                             <th class="py-2 px-4 text-left text-sm font-semibold text-white">Jumlah</th>
                             <th class="py-2 px-4 text-left text-sm font-semibold text-white">Tanggal</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @forelse ($barangIn as $index => $barang)
-                            <tr class="border-b hover:bg-[#3a3a3a]">
-                                <td class="py-2 px-4 text-sm text-white">{{ $index + 1 }}</td>
-                                <td class="py-2 px-4 text-sm text-white">{{ $barang->pegawai->nama }}</td>
-                                <td class="py-2 px-4 text-sm text-white">{{ $barang->jumlah }}</td>
-                                <td class="py-2 px-4 text-sm text-white">{{ $barang->created_at }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="3" class="py-20 px-4 text-lg text-white text-center">Tidak ada barang masuk
-                                </td>
-                            </tr>
-                        @endforelse
+                    <tbody class="bg-[#2a2a2a]">
+                        <x-splade-lazy>
+                            <x-slot:placeholder>
+                                <tr>
+                                    <td class="text-center p-8" colspan="5">
+                                        Sedang memuat list Barang...
+                                    </td>
+                                </tr>
+                            </x-slot:placeholder>
+                            @forelse ($barangIn as $index => $barang)
+                                <tr class="border-b hover:bg-[#3a3a3a]">
+                                    <td class="py-2 px-4 text-sm text-white">{{ $index + 1 }}</td>
+                                    <td class="py-2 px-4 text-sm text-white">{{ $barang->pegawai->nama }}</td>
+                                    <td class="py-2 px-4 text-sm text-white">{{ $barang->jumlah }}</td>
+                                    <td class="py-2 px-4 text-sm text-white">
+                                        {{ $barang->created_at->format('l, d-m-y, H:i') }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="py-20 px-4 text-lg text-white text-center">Tidak ada barang
+                                        masuk
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </x-splade-lazy>
                     </tbody>
                 </table>
+            </div>
+            <div class="flex justify-center w-full">
+                {{ $barangIn->appends(['barang-keluar' => $barangOut->currentPage()])->links() }}
             </div>
         </section>
 
@@ -117,33 +131,48 @@
             <div class="flex justify-center items-center py-2">
                 <h1 class="text-xl font-semibold mb-4 text-center">Barang Keluar</h1>
             </div>
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto rounded-md">
                 <table
-                    class="min-w-full mb-4 sm:table-fixed md:table-auto w-full border-collapse bg-[#3a3a3a] border border-gray-300 rounded-lg shadow-sm">
-                    <thead>
-                        <tr class="border-b bg-[#2a2a2a]">
+                    class="min-w-full bg-gray-300 h-full mb-4 border border-gray-300 shadow-sm rounded-lg overflow-hidden">
+                    <thead class="bg-[#1a1a1a]">
+                        <tr class="border-b">
                             <th class="py-2 px-4 text-left text-sm font-semibold text-white">No</th>
                             <th class="py-2 px-4 text-left text-sm font-semibold text-white">Pegawai</th>
                             <th class="py-2 px-4 text-left text-sm font-semibold text-white">Jumlah</th>
                             <th class="py-2 px-4 text-left text-sm font-semibold text-white">Tanggal</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @forelse ($barangOut as $index => $barang)
-                            <tr class="border-b hover:bg-[#3a3a3a]">
-                                <td class="py-2 px-4 text-sm text-white">{{ $index + 1 }}</td>
-                                <td class="py-2 px-4 text-sm text-white">{{ $barang->pegawai->nama }}</td>
-                                <td class="py-2 px-4 text-sm text-white">{{ $barang->jumlah }}</td>
-                                <td class="py-2 px-4 text-sm text-white">{{ $barang->created_at }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="3" class="py-20 px-4 text-lg text-white text-center">Tidak ada barang
-                                    keluar</td>
-                            </tr>
-                        @endforelse
+                    <tbody class="bg-[#2a2a2a]">
+                        <x-splade-lazy>
+                            <x-slot:placeholder>
+                                <tr>
+                                    <td class="text-center p-8" colspan="5">
+                                        Sedang memuat list Barang...
+                                    </td>
+                                </tr>
+                            </x-slot:placeholder>
+                            @forelse ($barangOut as $index => $barang)
+                                <tr class="border-b hover:bg-[#3a3a3a]">
+                                    <td class="py-2 px-4 text-sm text-white">{{ $index + 1 }}</td>
+                                    <td class="py-2 px-4 text-sm text-white">{{ $barang->pegawai->nama }}</td>
+                                    <td class="py-2 px-4 text-sm text-white">{{ $barang->jumlah }}</td>
+                                    <td class="py-2 px-4 text-sm text-white">
+                                        {{ $barang->created_at->format('l, d-m-y, H:i') }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="py-20 px-4 text-lg text-white text-center">Tidak ada barang
+                                        keluar</td>
+                                </tr>
+                            @endforelse
+                        </x-splade-lazy>
                     </tbody>
                 </table>
+            </div>
+            <div class="flex justify-center w-full">
+                @if ($barangOut->hasPages())
+                    {{ $barangOut->appends(['barang-masuk' => $barangIn->currentPage()])->links() }}
+                @endif
             </div>
         </section>
     </section>

@@ -17,7 +17,9 @@ class KategoriController extends Controller
      */
     public function index()
     {
-        $kategoris = KategoriBarang::with('barang')->get();
+        $kategorisQuery = KategoriBarang::with('barang')->latest();
+        $kategoris = $kategorisQuery->paginate(10);
+
         return view('auth.kategori-barang', [
             'title' => 'Kategori Barang',
             'kategoris' => $kategoris,
@@ -97,12 +99,13 @@ class KategoriController extends Controller
     public function show(string $kategori)
     {
         $kategorie = KategoriBarang::where('nama', $kategori)->firstOrFail();
-        $barangs = $kategorie->barang;
+
+        $barangsQuery = $kategorie->barang()->latest()->paginate(10, ['*'], 'barang');
 
         return view('auth.kategori-barang-show', [
             'title' => 'Lihat Kategori',
             'kategori' => $kategorie,
-            'barangs' => $barangs
+            'barangs' => $barangsQuery
         ]);
     }
 
@@ -111,14 +114,14 @@ class KategoriController extends Controller
      */
     public function edit(string $kategori)
     {
-        // $kategori = KategoriBarang::find($id);
         $kategorie = KategoriBarang::where('nama', $kategori)->firstOrFail();
-        $barangs = $kategorie->barang;
+
+        $barangsQuery = $kategorie->barang()->latest()->paginate(10, ['*'], 'barang');
 
         return view('auth.admin.kategori.edit', [
             'title' => 'Edit Kategori',
             'kategori' => $kategorie,
-            'barangs' => $barangs
+            'barangs' => $barangsQuery
         ]);
     }
 

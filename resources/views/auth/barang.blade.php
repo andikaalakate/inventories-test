@@ -32,17 +32,17 @@
                 <div class="justify-end">
                     <Link href="{{ route('pegawai.barang-in') }}"
                         class="text-sm font-semibold mb-4 ml-2 rounded-md border py-2 px-4 border-slate-200">Masukkan
-                        Barang</Link>
+                    Barang</Link>
                     <Link href="{{ route('pegawai.barang-out') }}"
                         class="text-sm font-semibold mb-4 ml-2 rounded-md border py-2 px-4 border-slate-200">Keluarkan
-                        Barang</Link>
+                    Barang</Link>
                 </div>
             @endauth
         </div>
-        <div class="overflow-x-auto">
-            <table class="min-w-full mb-4 bg-[#3a3a3a] border border-gray-300 rounded-lg shadow-sm">
-                <thead>
-                    <tr class="border-b bg-[#2a2a2a]">
+        <div class="overflow-x-auto rounded-md">
+            <table class="min-w-full bg-gray-300 h-full mb-4 border border-gray-300 shadow-sm rounded-lg overflow-hidden">
+                <thead class="bg-[#1a1a1a]">
+                    <tr class="border-b">
                         <th class="py-2 px-4 text-left text-sm font-semibold text-white">No</th>
                         <th class="py-2 sm:px-24 lg:px-4 text-center text-sm font-semibold text-white">Gambar</th>
                         <th class="py-2 px-4 text-left text-sm font-semibold text-white">Nama</th>
@@ -53,76 +53,102 @@
                         <th class="py-2 px-4 text-left text-sm font-semibold text-white">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @forelse ($barangs as $index => $barang)
-                        <tr class="border-b hover:bg-[#3a3a3a]">
-                            <td class="py-2 px-4 text-sm text-white">{{ $index + 1 }}</td>
-                            <td class="py-4 lg:px-16 sm:px-24 text-sm text-white">
-                                @php
-                                    $gambar = json_decode($barang->gambar);
-                                    $totalGambar = $gambar ? count($gambar) : 0;
-                                @endphp
+                <tbody class="bg-[#2a2a2a]">
+                    <x-splade-lazy>
+                        <x-slot:placeholder>
+                            <tr>
+                                <td class="text-center p-8" colspan="8">
+                                    Sedang memuat list Barang...
+                                </td>
+                            </tr>
+                        </x-slot:placeholder>
+                        @forelse ($barangs as $index => $barang)
+                            <tr class="border-b hover:bg-[#3a3a3a] bg-[#2a2a2a]">
+                                <td class="py-2 px-4 text-sm text-white">{{ $barangs->firstItem() + $index }}</td>
+                                <td class="py-4 lg:px-16 sm:px-24 text-sm text-white">
+                                    @php
+                                        $gambar = json_decode($barang->gambar);
+                                        $totalGambar = $gambar ? count($gambar) : 0;
+                                    @endphp
 
-                                <div class="relative w-16 h-16">
-                                    @if ($totalGambar > 0)
-                                        <img src="{{ Storage::url($gambar[0]) }}" alt="Gambar utama"
-                                            class="w-full h-full rounded-full border-2 border-gray-50 object-cover absolute top-0 left-0 z-10">
+                                    <div class="relative w-16 h-16">
+                                        @if ($totalGambar > 0)
+                                            <img src="{{ Storage::url($gambar[0]) }}" alt="Gambar utama"
+                                                class="w-full h-full rounded-full border-2 border-gray-50 object-cover absolute top-0 left-0 z-10">
 
-                                        @if ($totalGambar > 1)
-                                            <img src="{{ Storage::url($gambar[1]) }}" alt="Gambar kedua"
-                                                class="w-full h-full rounded-full border border-gray-50 object-cover absolute hidden md:flex top-0 left-10 z-20">
+                                            @if ($totalGambar > 1)
+                                                <img src="{{ Storage::url($gambar[1]) }}" alt="Gambar kedua"
+                                                    class="w-full h-full rounded-full border border-gray-50 object-cover absolute hidden md:flex top-0 left-10 z-20">
+                                            @endif
+
+                                            @if ($totalGambar > 2)
+                                                <div
+                                                    class="absolute top-0 left-16 hidden md:flex items-center justify-center w-full h-full bg-gray-800 text-white rounded-full border border-gray-50 z-30">
+                                                    +{{ $totalGambar - 2 }}
+                                                </div>
+                                            @endif
+                                        @else
+                                            <img src="{{ asset('path/to/default/image.png') }}" alt="Gambar default"
+                                                class="w-full h-full rounded-full border-2 border-gray-50 object-cover absolute top-0 left-0 z-10">
                                         @endif
-
-                                        @if ($totalGambar > 2)
-                                            <div
-                                                class="absolute top-0 left-16 hidden md:flex items-center justify-center w-full h-full bg-gray-800 text-white rounded-full border border-gray-50 z-30">
-                                                +{{ $totalGambar - 2 }}
-                                            </div>
-                                        @endif
-                                    @else
-                                        <img src="{{ asset('path/to/default/image.png') }}" alt="Gambar default"
-                                            class="w-full h-full rounded-full border-2 border-gray-50 object-cover absolute top-0 left-0 z-10">
-                                    @endif
-                                </div>
-                            </td>
-                            <td class="py-2 px-4 text-sm text-white">{{ $barang->nama }}</td>
-                            <td class="py-2 px-4 text-sm text-white">{{ $barang->kategori->nama }}</td>
-                            <td class="py-2 px-4 text-sm text-white">{{ $barang->jumlah }}</td>
-                            <td class="py-2 px-4 text-sm text-white">{{ $barang->deskripsi }}</td>
-                            <td class="py-2 px-4 text-sm text-white">
-                                <span
-                                    class="inline-block px-2 py-1 text-xs font-semibold rounded-full {{ $barang->status === 'tersedia' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                    {{ ucfirst($barang->status) }}
-                                </span>
-                            </td>
-                            <td class="py-2 px-4 text-sm text-white">
-                                <div class="justify-start items-center flex gap-4">
-                                    @auth('admin')
-                                        <Link href="{{ route('admin.barang.show', $barang->nama) }}"
-                                            class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">Lihat</Link>
-                                        <Link href="{{ route('admin.barang.edit', $barang->nama) }}"
-                                            class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">Edit</Link>
-                                        <x-splade-form action="{{ route('admin.barang.destroy', $barang->id) }}" method="DELETE">
-                                            @method('DELETE')
-                                            @csrf
-                                            <button type="submit"
-                                                class="text-[#1a1a1a] rounded-md py-2 px-3 bg-gray-50 hover:bg-[#1a1a1a] hover:text-gray-50 ml-2 transition-all duration-300">Delete</button>
-                                        </x-splade-form>
-                                    @endauth
-                                    @auth('pegawai')
-                                        <Link href="{{ route('pegawai.barang.show', $barang->nama) }}"
-                                            class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">Lihat</Link>
-                                    @endauth
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="8" class="py-20 px-4 text-lg text-white text-center">Tidak ada barang</td>
-                        </tr>
-                    @endforelse
+                                    </div>
+                                </td>
+                                <td class="py-2 px-4 text-sm text-white">{{ $barang->nama }}</td>
+                                <td class="py-2 px-4 text-sm text-white">{{ $barang->kategori->nama }}</td>
+                                <td class="py-2 px-4 text-sm text-white">{{ $barang->jumlah }}</td>
+                                <td class="py-2 px-4 text-sm text-white">{{ $barang->deskripsi }}</td>
+                                <td class="py-2 px-4 text-sm text-white">
+                                    <span
+                                        class="inline-block px-2 py-1 text-xs font-semibold rounded-full {{ $barang->status === 'tersedia' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                        {{ ucfirst($barang->status) }}
+                                    </span>
+                                </td>
+                                <td class="py-2 px-4 text-sm text-white">
+                                    <div class="justify-start items-center flex gap-4">
+                                        @auth('admin')
+                                            <Link href="{{ route('admin.barang.show', $barang->nama) }}"
+                                                class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">
+                                            Lihat</Link>
+                                            <Link href="{{ route('admin.barang.edit', $barang->nama) }}"
+                                                class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">
+                                            Edit</Link>
+                                            <x-splade-form action="{{ route('admin.barang.destroy', $barang->id) }}"
+                                                method="DELETE">
+                                                @method('DELETE')
+                                                @csrf
+                                                <button type="submit"
+                                                    class="text-[#1a1a1a] rounded-md py-2 px-3 bg-gray-50 hover:bg-[#1a1a1a] hover:text-gray-50 ml-2 transition-all duration-300">Delete</button>
+                                            </x-splade-form>
+                                        @endauth
+                                        @auth('pegawai')
+                                            <Link href="{{ route('pegawai.barang.show', $barang->nama) }}"
+                                                class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">
+                                            Lihat</Link>
+                                        @endauth
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="8" class="py-20 px-4 text-lg text-white text-center">Tidak ada barang</td>
+                            </tr>
+                        @endforelse
+                    </x-splade-lazy>
                 </tbody>
             </table>
+        </div>
+
+        <div class="flex justify-center w-full">
+            {{-- @if ($barangs->hasPages())
+                <x-pagination :paginator="$barangs"
+                    route="
+                @auth('admin')
+                    {{ route('admin.barang.list') }}
+                @endauth @auth('pegawai')
+                    {{ route('pegawai.barang.list') }}
+                @endauth" />
+            @endif --}}
+            {{ $barangs->links() }}
         </div>
     </section>
 @endsection

@@ -49,13 +49,12 @@
             <!-- Gambar -->
             <div class="flex flex-col">
                 <x-splade-file label="Gambar" name="gambar[]" id="gambar" multiple filepond preview />
-            </label>
             </div>
 
             <!-- Status -->
             <div class="flex flex-col">
                 <label for="status" class="text-sm font-semibold py-2 text-white">Status</label>
-                <input type="text" class="border border-[#3a3a3a] bg-[#4a4a4a] placeholder:text-gray-200 rounded-lg p-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500 capitalize" :value="form.jumlah > 0 ? 'Tersedia' : 'Habis'" />
+                <input type="text" readonly class="border border-[#3a3a3a] bg-[#4a4a4a] placeholder:text-gray-200 rounded-lg p-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500 capitalize" :value="form.jumlah > 0 ? 'Tersedia' : 'Habis'" />
             </div>
 
             <!-- Submit Button -->

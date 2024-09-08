@@ -17,7 +17,9 @@ class SiswaController extends Controller
      */
     public function index()
     {
-        $siswas = Siswa::get();
+        $siswasQuery = Siswa::latest();
+        $siswas = $siswasQuery->paginate(10);
+        
         return view('auth.admin.siswa', [
             'title' => 'Siswa',
             'siswas' => $siswas

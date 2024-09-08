@@ -18,11 +18,11 @@ class DashboardController extends Controller
     public function index()
     {
         $countData = [
-            'barangCount' => Barang::count(),
-            'kategoriCount' => KategoriBarang::count(),
-            'pegawaiCount' => Pegawai::count(),
-            'siswaCount' => Siswa::count(),
-            'userCount' => User::count(),
+            'barangCount' => Barang::select('id')->count(),
+            'kategoriCount' => KategoriBarang::select('id')->count(),
+            'pegawaiCount' => Pegawai::select('id')->count(),
+            'siswaCount' => Siswa::select('id')->count(),
+            'userCount' => User::select('id')->count(),
         ];
 
         return view('auth.admin.dashboard', array_merge(['title' => 'Dashboard'], $countData));

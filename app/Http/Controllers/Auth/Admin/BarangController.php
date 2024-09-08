@@ -22,7 +22,8 @@ class BarangController extends Controller
      */
     public function index()
     {
-        $barangs = Barang::with('kategori')->get();
+        $barangsQuery = Barang::with('kategori')->latest();
+        $barangs = $barangsQuery->paginate(10);
         $kategoris = KategoriBarang::get();
         // dd($barangs);
         return view('auth.barang', [
@@ -107,18 +108,18 @@ class BarangController extends Controller
 
             // Menangani gambar
             if ($request->hasFile('gambar')) {
-                $image = $request->file('gambar');
-                // $imagePaths = [];
+                $images = $request->file('gambar');
+                $imagePaths = [];
 
-                // foreach ($images as $image) {
+                foreach ($images as $image) {
                     $imageName = $image->getClientOriginalName();
                     $imagePath = $image->storeAs('gambar/barang', $imageName, 'public');
-                //     $imagePaths[] = $imagePath;
-                // }
+                    $imagePaths[] = $imagePath;
+                }
 
                 $barang->gambar = $imagePath;
 
-                // $barang->gambar = json_encode($imagePaths); // Simpan jalur gambar sebagai JSON
+                $barang->gambar = json_encode($imagePaths); // Simpan jalur gambar sebagai JSON
             }
 
             $barang->save();
@@ -153,8 +154,8 @@ class BarangController extends Controller
         $barang = Barang::where('nama', $barang)->firstOrFail();
         $kategoris = KategoriBarang::get();
 
-        $barangIn = $barang->barangIn;
-        $barangOut = $barang->barangOut;
+        $barangIn = $barang->barangIn()->latest()->paginate(10, ['*'], 'barang-masuk');
+        $barangOut = $barang->barangOut()->latest()->paginate(10, ['*'], 'barang-keluar');
 
         return view('auth.barang-show', [
             'title' => 'Lihat Barang',
@@ -173,8 +174,8 @@ class BarangController extends Controller
         $barang = Barang::where('nama', $barang)->firstOrFail();
         $kategoris = KategoriBarang::get();
 
-        $barangIn = $barang->barangIn;
-        $barangOut = $barang->barangOut;
+        $barangIn = $barang->barangIn()->latest()->paginate(10, ['*'], 'barang-masuk');
+        $barangOut = $barang->barangOut()->latest()->paginate(10, ['*'], 'barang-keluar');
 
         $gambarPaths = json_decode($barang->gambar, true);
 

@@ -9,8 +9,7 @@
 
     <section class="p-6 my-4 mx-8 bg-[#2a2a2a] rounded-lg shadow-md">
         <x-splade-form action="{{ route('admin.kategori.update', $kategori->id) }}" method="put"
-            enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-6"
-            :default="[ 'nama' => $kategori->nama ]">
+            enctype="multipart/form-data" class="grid grid-cols-1 md:grid-cols-2 gap-6" :default="['nama' => $kategori->nama]">
             @csrf
             @method('PUT')
 
@@ -35,10 +34,10 @@
         <div class="flex justify-center items-center">
             <h1 class="text-xl font-semibold mb-4 text-center">Barang yang terkait</h1>
         </div>
-        <div class="overflow-x-auto">
-            <table class="min-w-full mb-4 bg-[#3a3a3a] border border-gray-300 rounded-lg shadow-sm">
-                <thead>
-                    <tr class="border-b bg-[#2a2a2a]">
+        <div class="overflow-x-auto rounded-md">
+            <table class="min-w-full bg-gray-300 h-full mb-4 border border-gray-300 shadow-sm rounded-lg overflow-hidden">
+                <thead class="bg-[#1a1a1a]">
+                    <tr class="border-b">
                         <th class="py-2 px-4 text-left text-sm font-semibold text-white">No</th>
                         <th class="py-2 px-4 text-left text-sm font-semibold text-white">Nama Barang</th>
                         <th class="py-2 px-4 text-left text-sm font-semibold text-white">Jumlah</th>
@@ -46,27 +45,40 @@
                         <th class="py-2 px-4 text-left text-sm font-semibold text-white">Status</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @forelse ($barangs as $index => $barang)
-                        <tr class="border-b hover:bg-[#3a3a3a]">
-                            <td class="py-2 px-4 text-sm text-white">{{ $index + 1 }}</td>
-                            <td class="py-2 px-4 text-sm text-white">{{ $barang->nama }}</td>
-                            <td class="py-2 px-4 text-sm text-white">{{ $barang->jumlah }}</td>
-                            <td class="py-2 px-4 text-sm text-white">{{ $barang->deskripsi }}</td>
-                            <td class="py-2 px-4 text-sm text-white">
-                                <span
-                                    class="inline-block px-2 py-1 text-xs font-semibold rounded-full {{ $barang->status === 'tersedia' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                    {{ ucfirst($barang->status) }}
-                                </span>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="7" class="py-20 px-4 text-lg text-white text-center">Tidak ada barang</td>
-                        </tr>
-                    @endforelse
+                <tbody class="bg-[#2a2a2a]">
+                    <x-splade-lazy>
+                        <x-slot:placeholder>
+                            <tr>
+                                <td class="text-center p-8" colspan="5">
+                                    Sedang memuat list Barang...
+                                </td>
+                            </tr>
+                        </x-slot:placeholder>
+                        @forelse ($barangs as $index => $barang)
+                            <tr class="border-b hover:bg-[#3a3a3a]">
+                                <td class="py-2 px-4 text-sm text-white">{{ $index + 1 }}</td>
+                                <td class="py-2 px-4 text-sm text-white">{{ $barang->nama }}</td>
+                                <td class="py-2 px-4 text-sm text-white">{{ $barang->jumlah }}</td>
+                                <td class="py-2 px-4 text-sm text-white">{{ $barang->deskripsi }}</td>
+                                <td class="py-2 px-4 text-sm text-white">
+                                    <span
+                                        class="inline-block px-2 py-1 text-xs font-semibold rounded-full {{ $barang->status === 'tersedia' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                        {{ ucfirst($barang->status) }}
+                                    </span>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="py-20 px-4 text-lg text-white text-center">Tidak ada barang</td>
+                            </tr>
+                        @endforelse
+                    </x-splade-lazy>
                 </tbody>
             </table>
+        </div>
+
+        <div class="flex justify-center w-full">
+            {{ $barangs->links() }}
         </div>
     </section>
 @endsection

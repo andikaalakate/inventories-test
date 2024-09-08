@@ -27,7 +27,8 @@ class BarangOutController extends Controller
     public function create()
     {
         $barangs = Barang::get();
-        $barangOut = BarangOut::get();
+        $barangOut = BarangOut::with('barang')->where('pegawai_id', Auth::user()->id)->latest()->paginate(10);
+
         return view('auth.pegawai.barang.out', [
             'barangs' => $barangs,
             'barangOut' => $barangOut,
@@ -85,7 +86,7 @@ class BarangOutController extends Controller
                 ->autoDismiss(5)
                 ->message('Barang dikeluarkan');
 
-            return redirect()->route('pegawai.barang-in');
+            return redirect()->route('pegawai.barang-out');
         } catch (\Exception $e) {
             DB::rollBack();
 

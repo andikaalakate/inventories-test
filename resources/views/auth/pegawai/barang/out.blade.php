@@ -16,8 +16,8 @@
             <!-- Barang -->
             <div class="flex flex-col">
                 <label for="barang" class="text-sm font-semibold py-2 text-white">Barang</label>
-                <x-splade-select v-model="form.barang_id" id="barang" required
-                    :options="$barangs" option-value="id" option-label="nama" placeholder="Pilih Barang">
+                <x-splade-select v-model="form.barang_id" id="barang" required :options="$barangs" option-value="id"
+                    option-label="nama" placeholder="Pilih Barang">
                 </x-splade-select>
             </div>
 
@@ -43,32 +43,47 @@
         <div class="flex justify-center items-center">
             <h1 class="text-xl font-semibold mb-4 text-center">Barang yang pernah Anda keluarkan</h1>
         </div>
-        <div class="overflow-x-auto">
-            <table class="min-w-full mb-4 bg-[#3a3a3a] border border-gray-300 rounded-lg shadow-sm">
-                <thead>
-                    <tr class="border-b bg-[#2a2a2a]">
+        <div class="overflow-x-auto rounded-md">
+            <table class="min-w-full bg-gray-300 h-full mb-4 border border-gray-300 shadow-sm rounded-lg overflow-hidden">
+                <thead class="bg-[#1a1a1a]">
+                    <tr class="border-b">
                         <th class="py-2 px-4 text-left text-sm font-semibold text-white">No</th>
                         <th class="py-2 px-4 text-left text-sm font-semibold text-white">Nama Barang</th>
                         <th class="py-2 px-4 text-left text-sm font-semibold text-white">Jumlah</th>
                         <th class="py-2 px-4 text-left text-sm font-semibold text-white">Tanggal</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @forelse ($barangOut->where('pegawai_id', auth()->user()->id) as $index => $barang)
-                        <tr class="border-b hover:bg-[#3a3a3a]">
-                            <td class="py-2 px-4 text-sm text-white">{{ $index + 1 }}</td>
-                            <td class="py-2 px-4 text-sm text-white">{{ $barang->barang->nama }}</td>
-                            <td class="py-2 px-4 text-sm text-white">{{ $barang->jumlah }}</td>
-                            <td class="py-2 px-4 text-sm text-white">{{ $barang->created_at }}</td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="4" class="py-20 px-4 text-lg text-white text-center">Tidak ada barang yang
-                                pernah Anda keluarkan</td>
-                        </tr>
-                    @endforelse
+                <tbody class="bg-[#2a2a2a]">
+                    <x-splade-lazy>
+                        <x-slot:placeholder>
+                            <tr>
+                                <td class="text-center p-8" colspan="4">
+                                    Sedang memuat list Barang...
+                                </td>
+                            </tr>
+                        </x-slot:placeholder>
+                        @forelse ($barangOut as $index => $barang)
+                            <tr class="border-b hover:bg-[#3a3a3a]">
+                                <td class="py-2 px-4 text-sm text-white">{{ $barangOut->firstItem() + $index }}</td>
+                                <td class="py-2 px-4 text-sm text-white">{{ $barang->barang->nama }}</td>
+                                <td class="py-2 px-4 text-sm text-white">{{ $barang->jumlah }}</td>
+                                <td class="py-2 px-4 text-sm text-white">{{ $barang->created_at->format('l, d-m-y, H:i') }}
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4" class="py-20 px-4 text-lg text-white text-center">Tidak ada barang yang
+                                    pernah Anda keluarkan</td>
+                            </tr>
+                        @endforelse
+                    </x-splade-lazy>
                 </tbody>
             </table>
+        </div>
+        <div class="flex justify-center w-full">
+            @if ($barangOut->hasPages())
+                <x-pagination :paginator="$barangOut" route="{{ route('pegawai.barang-out') }}" />
+            @endif
         </div>
     </section>
 @endsection

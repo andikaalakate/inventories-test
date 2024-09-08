@@ -26,10 +26,10 @@
             <Link href="{{ route('admin.pegawai.create') }}"
                 class="text-sm font-semibold mb-4 rounded-md border py-2 px-4 border-slate-200">Tambah</Link>
         </div>
-        <div class="overflow-x-auto">
-            <table class="min-w-full mb-4 bg-[#3a3a3a] border border-gray-300 rounded-lg shadow-sm">
-                <thead>
-                    <tr class="border-b bg-[#2a2a2a]">
+        <div class="overflow-x-auto rounded-md">
+            <table class="min-w-full bg-gray-300 h-full mb-4 border border-gray-300 shadow-sm rounded-lg overflow-hidden">
+                <thead class="bg-[#1a1a1a]">
+                    <tr class="border-b">
                         <th class="py-2 px-4 text-left text-sm font-semibold text-white">No</th>
                         <th class="py-2 sm:px-24 lg:px-4 text-center text-sm font-semibold text-white">Avatar</th>
                         <th class="py-2 px-4 text-left text-sm font-semibold text-white">Nama</th>
@@ -40,51 +40,65 @@
                         <th class="py-2 px-4 text-left text-sm font-semibold text-white">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @forelse ($pegawais as $index => $pegawai)
-                        <tr class="border-b hover:bg-[#3a3a3a]">
-                            <td class="py-2 px-4 text-sm text-white">{{ $index + 1 }}</td>
-                            <td class="py-4 lg:px-16 sm:px-24 text-sm text-white">
-                                <div class="relative w-16 h-16">
-                                    @if ($pegawai->avatar_url !== null)
-                                        <img src="{{ Storage::url($gambar) }}" alt="Gambar utama"
-                                            class="w-full h-full rounded-full border-2 border-gray-50 object-cover absolute top-0 left-0 z-10">
-                                    @else
-                                        <img src="{{ asset('path/to/default/image.png') }}" alt="Gambar default"
-                                            class="w-full h-full rounded-full border-2 border-gray-50 object-cover absolute top-0 left-0 z-10">
-                                    @endif
-                                </div>
-                            </td>
-                            <td class="py-2 px-4 text-sm text-white">{{ $pegawai->nama }}</td>
-                            <td class="py-2 px-4 text-sm text-white">{{ $pegawai->email }}</td>
-                            <td class="py-2 px-4 text-sm text-white">{{ $pegawai->jabatan }}</td>
-                            <td class="py-2 px-4 text-sm text-white">{{ $pegawai->barangIn->count() ?? 0 }}</td>
-                            <td class="py-2 px-4 text-sm text-white">{{ $pegawai->barangOut->count() ?? 0 }}</td>
-                            <td class="py-2 px-4 text-sm text-white">
-                                <div class="justify-start items-center flex gap-4">
-                                    <Link href="{{ route('admin.pegawai.show', $pegawai->nama) }}"
-                                        class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">
-                                    Lihat</Link>
-                                    <Link href="{{ route('admin.pegawai.edit', $pegawai->nama) }}"
-                                        class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">
-                                    Edit</Link>
-                                    <x-splade-form action="{{ route('admin.pegawai.destroy', $pegawai->id) }}"
-                                        method="post">
-                                        @method('DELETE')
-                                        @csrf
-                                        <button type="submit"
-                                            class="text-[#1a1a1a] rounded-md py-2 px-3 bg-gray-50 hover:bg-[#1a1a1a] hover:text-gray-50 ml-2 transition-all duration-300">Delete</button>
-                                    </x-splade-form>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="7" class="py-20 px-4 text-lg text-white text-center">Tidak ada Pegawai</td>
-                        </tr>
-                    @endforelse
+                <tbody class="bg-[#2a2a2a]">
+                    <x-splade-lazy>
+                        <x-slot:placeholder>
+                            <tr>
+                                <td class="text-center p-8" colspan="8">
+                                    Sedang memuat list Pegawai...
+                                </td>
+                            </tr>
+                        </x-slot:placeholder>
+                        @forelse ($pegawais as $index => $pegawai)
+                            <tr class="border-b hover:bg-[#3a3a3a]">
+                                <td class="py-2 px-4 text-sm text-white">{{ $index + 1 }}</td>
+                                <td class="py-4 lg:px-16 sm:px-24 text-sm text-white">
+                                    <div class="relative w-16 h-16">
+                                        @if ($pegawai->avatar_url !== null)
+                                            <img src="{{ Storage::url($gambar) }}" alt="Gambar utama"
+                                                class="w-full h-full rounded-full border-2 border-gray-50 object-cover absolute top-0 left-0 z-10">
+                                        @else
+                                            <img src="{{ asset('path/to/default/image.png') }}" alt="Gambar default"
+                                                class="w-full h-full rounded-full border-2 border-gray-50 object-cover absolute top-0 left-0 z-10">
+                                        @endif
+                                    </div>
+                                </td>
+                                <td class="py-2 px-4 text-sm text-white">{{ $pegawai->nama }}</td>
+                                <td class="py-2 px-4 text-sm text-white">{{ $pegawai->email }}</td>
+                                <td class="py-2 px-4 text-sm text-white">{{ $pegawai->jabatan }}</td>
+                                <td class="py-2 px-4 text-sm text-white">{{ $pegawai->barangIn->count() ?? 0 }}</td>
+                                <td class="py-2 px-4 text-sm text-white">{{ $pegawai->barangOut->count() ?? 0 }}</td>
+                                <td class="py-2 px-4 text-sm text-white">
+                                    <div class="justify-start items-center flex gap-4">
+                                        <Link href="{{ route('admin.pegawai.show', $pegawai->nama) }}"
+                                            class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">
+                                        Lihat</Link>
+                                        <Link href="{{ route('admin.pegawai.edit', $pegawai->nama) }}"
+                                            class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">
+                                        Edit</Link>
+                                        <x-splade-form action="{{ route('admin.pegawai.destroy', $pegawai->id) }}"
+                                            method="post">
+                                            @method('DELETE')
+                                            @csrf
+                                            <button type="submit"
+                                                class="text-[#1a1a1a] rounded-md py-2 px-3 bg-gray-50 hover:bg-[#1a1a1a] hover:text-gray-50 ml-2 transition-all duration-300">Delete</button>
+                                        </x-splade-form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="8" class="py-20 px-4 text-lg text-white text-center">Tidak ada Pegawai</td>
+                            </tr>
+                        @endforelse
+                    </x-splade-lazy>
                 </tbody>
             </table>
+        </div>
+        <div class="flex justify-center w-full">
+            @if ($pegawais->hasPages())
+                <x-pagination :paginator="$pegawais" route="{{ route('admin.pegawai.list') }}" />
+            @endif
         </div>
     </section>
 @endsection

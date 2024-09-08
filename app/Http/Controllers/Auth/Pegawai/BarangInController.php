@@ -27,7 +27,8 @@ class BarangInController extends Controller
     public function create()
     {
         $barangs = Barang::get();
-        $barangIn = BarangIn::get();
+        $barangIn = BarangIn::with('barang')->where('pegawai_id', Auth::user()->id)->latest()->paginate(10);
+
         return view('auth.pegawai.barang.in', [
             'barangs' => $barangs,
             'barangIn' => $barangIn,
