@@ -55,7 +55,7 @@
                                 <td class="py-4 lg:px-16 sm:px-24 text-sm text-white">
                                     <div class="relative w-16 h-16">
                                         @if ($pegawai->avatar_url !== null)
-                                            <img src="{{ Storage::url($gambar) }}" alt="Gambar utama"
+                                            <img src="{{ Storage::url('avatars/' . $pegawai->avatar_url) }}" alt="{{ $pegawai->nama }}"
                                                 class="w-full h-full rounded-full border-2 border-gray-50 object-cover absolute top-0 left-0 z-10">
                                         @else
                                             <img src="{{ asset('path/to/default/image.png') }}" alt="Gambar default"
@@ -70,10 +70,10 @@
                                 <td class="py-2 px-4 text-sm text-white">{{ $pegawai->barangOut->count() ?? 0 }}</td>
                                 <td class="py-2 px-4 text-sm text-white">
                                     <div class="justify-start items-center flex gap-4">
-                                        <Link href="{{ route('admin.pegawai.show', $pegawai->nama) }}"
+                                        <Link href="{{ route('admin.pegawai.show', $pegawai->username) }}"
                                             class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">
                                         Lihat</Link>
-                                        <Link href="{{ route('admin.pegawai.edit', $pegawai->nama) }}"
+                                        <Link href="{{ route('admin.pegawai.edit', $pegawai->username) }}"
                                             class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">
                                         Edit</Link>
                                         <x-splade-form action="{{ route('admin.pegawai.destroy', $pegawai->id) }}"
