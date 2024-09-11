@@ -7,6 +7,7 @@ use App\Models\Pegawai;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use ProtoneMedia\Splade\Facades\Toast;
 use ProtoneMedia\Splade\FileUploads\ExistingFile;
@@ -132,16 +133,19 @@ class PegawaiController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $nama)
+    public function show(string $username)
     {
-        $pegawai = Pegawai::where('nama', $nama)->first();
+        $pegawai = Pegawai::where('username', $username)->first();
 
-        $avatarPath = 'public/avatars/' . $pegawai->avatar_url;
-
-        $pegawai->avatar_url = $avatarPath;
-
-        $avatar =
-            ExistingFile::fromDisk('public')->get($avatarPath);
+        if ($pegawai->avatar_url == null) {
+            $avatar = '';
+        } else {
+            $avatarPath = 'avatars/' . $pegawai->avatar_url;
+            $pegawai->avatar_url = $avatarPath;
+    
+            $avatar =
+                ExistingFile::fromDisk('public')->get($avatarPath);
+        }
 
         return view('auth.admin.pegawai-show', [
             'title' => 'Lihat Pegawai',
@@ -157,13 +161,16 @@ class PegawaiController extends Controller
     {
         $pegawai = Pegawai::where('username', $username)->first();
 
-        $avatarPath = 'avatars/' . $pegawai->avatar_url;
+        if ($pegawai->avatar_url == null) {
+            $avatar = '';
+        } else {
+            $avatarPath = 'avatars/' . $pegawai->avatar_url;
+            $pegawai->avatar_url = $avatarPath;
 
-        $pegawai->avatar_url = $avatarPath;
-
-        $avatar =
-            ExistingFile::fromDisk('public')->get($avatarPath);
-
+            $avatar =
+                ExistingFile::fromDisk('public')->get($avatarPath);
+        }
+        
         return view('auth.admin.pegawai.edit', [
             'title' => 'Edit Pegawai',
             'pegawai' => $pegawai,
@@ -222,9 +229,8 @@ class PegawaiController extends Controller
         try {
             DB::beginTransaction();
 
-            $pegawai = Pegawai::findOrFail($id); // Mengambil data pegawai berdasarkan ID
+            $pegawai = Pegawai::findOrFail($id);
 
-            // Mengupdate data pegawai dengan data yang diterima dari request
             $pegawai->fill($request->only('username', 'nama', 'email', 'jenis_kelamin', 'jabatan', 'alamat', 'no_hp'));
 
             if ($request->filled('password')) {
@@ -238,7 +244,7 @@ class PegawaiController extends Controller
                 $pegawai->avatar_url = $filename;
             }
 
-            $pegawai->save(); // Menyimpan perubahan pada pegawai
+            $pegawai->save();
 
             DB::commit();
 
@@ -267,6 +273,36 @@ class PegawaiController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            DB::beginTransaction();
+
+            $pegawai = Pegawai::findOrFail($id);
+
+            if ($pegawai->avatar_url) {
+                $avatar = $pegawai->avatar_url;
+                Storage::disk('public')->delete('avatars/' . $avatar);
+            }
+
+            $pegawai->delete();
+            DB::commit();
+
+            Toast::title('Success!')
+                ->success()
+                ->rightTop()
+                ->autoDismiss(5)
+                ->message('Pegawai berhasil dihapus');
+
+            return redirect()->route('admin.pegawai.list');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            Toast::title('Error!')
+                ->danger()
+                ->rightTop()
+                ->autoDismiss(5)
+                ->message('Pegawai gagal dihapus!' . $e->getMessage());
+
+            return redirect()->back();
+        }
     }
 }

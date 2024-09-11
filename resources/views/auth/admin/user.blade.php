@@ -33,6 +33,7 @@
                         <th class="py-2 px-4 text-left text-sm font-semibold text-white">No</th>
                         <th class="py-2 sm:px-24 lg:px-4 text-center text-sm font-semibold text-white">Avatar</th>
                         <th class="py-2 px-4 text-left text-sm font-semibold text-white">Nama</th>
+                        <th class="py-2 px-4 text-left text-sm font-semibold text-white">Username</th>
                         <th class="py-2 px-4 text-left text-sm font-semibold text-white">Email</th>
                         <th class="py-2 px-4 text-left text-sm font-semibold text-white">Aksi</th>
                     </tr>
@@ -41,7 +42,7 @@
                     <x-splade-lazy>
                         <x-slot:placeholder>
                             <tr>
-                                <td class="text-center p-8" colspan="5">
+                                <td class="text-center p-8" colspan="6">
                                     Sedang memuat list Pengguna...
                                 </td>
                             </tr>
@@ -52,7 +53,7 @@
                                 <td class="py-4 lg:px-16 sm:px-24 text-sm text-white">
                                     <div class="relative w-16 h-16">
                                         @if ($admin->avatar_url !== null)
-                                            <img src="{{ Storage::url($gambar) }}" alt="Gambar utama"
+                                            <img src="{{ Storage::url('avatars/' . $admin->avatar_url) }}" alt="Gambar utama"
                                                 class="w-full h-full rounded-full border-2 border-gray-50 object-cover absolute top-0 left-0 z-10">
                                         @else
                                             <img src="{{ asset('path/to/default/image.png') }}" alt="Gambar default"
@@ -61,17 +62,18 @@
                                     </div>
                                 </td>
                                 <td class="py-2 px-4 text-sm text-white">{{ $admin->name }}</td>
+                                <td class="py-2 px-4 text-sm text-white">{{ $admin->username }}</td>
                                 <td class="py-2 px-4 text-sm text-white">{{ $admin->email }}</td>
                                 <td class="py-2 px-4 text-sm text-white">
                                     <div class="justify-start items-center flex gap-4">
-                                        <Link href="{{ route('admin.user.show', $admin->name) }}"
+                                        <Link href="{{ route('admin.user.show', $admin->username) }}"
                                             class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">
                                         Lihat</Link>
-                                        <Link href="{{ route('admin.user.edit', $admin->name) }}"
+                                        <Link href="{{ route('admin.user.edit', $admin->username) }}"
                                             class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">
                                         Edit</Link>
                                         <x-splade-form action="{{ route('admin.user.destroy', $admin->id) }}"
-                                            method="post">
+                                            method="delete">
                                             @method('DELETE')
                                             @csrf
                                             <button type="submit"
@@ -82,7 +84,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="py-20 px-4 text-lg text-white text-center">Tidak ada Pegawai</td>
+                                <td colspan="6" class="py-20 px-4 text-lg text-white text-center">Tidak ada Pegawai</td>
                             </tr>
                         @endforelse
                     </x-splade-lazy>

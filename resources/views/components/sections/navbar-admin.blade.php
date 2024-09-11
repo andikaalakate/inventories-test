@@ -6,9 +6,14 @@
         </div>
         <div class="p-1 pr-4 flex gap-4 items-center ">
             <p class="text-lg flex">{{ auth()->user()->name }} | <span class="hidden md:flex"> |
-                    ({{ auth()->user()->email }})</span></p>
+                    ({{ auth()->user()->username }})</span></p>
             <div class="rounded-full size-9 overflow-hidden bg-white">
-                <img src="{{ asset('user.png') }}" alt="Gambar Profile" class="size-full">
+                @if (auth()->user()->avatar_url)
+                    <img src="{{ Storage::url('/avatars/' . auth()->user()->avatar_url) }}" alt="Gambar Profile"
+                        class="size-full object-cover">
+                @else
+                    <img src="{{ asset('user.png') }}" alt="Gambar Profile" class="size-full object-cover">
+                @endif
             </div>
         </div>
     </div>
@@ -77,19 +82,19 @@
                     <box-icon name='user-pin' class="fill-white"></box-icon>Admin / Pengguna
                     </Link>
                 </li>
-                <li>
+                {{-- <li>
                     <Link href="{{ route('admin.laporan') }}"
                         class="flex w-full h-full py-1 px-3 rounded-xl items-center gap-2 bg-[#3a3a3a]
                         {{ request()->is('admin/laporan*') ? 'border-2 border-slate-50' : '' }}">
                     <box-icon name='stats' class="fill-white"></box-icon>Laporan
                     </Link>
-                </li>
+                </li> --}}
             </ul>
             <ul class="p-[27px] flex flex-col gap-3 text-[18px] ">
                 <li>
                     <x-splade-form action="{{ route('logout') }}" method="post" confirm="Keluar?"
-                            confirm-text="Apa kamu yakin?" confirm-button="Ya, aku ingin keluar dari akunku!"
-                            cancel-button="Tidak">
+                        confirm-text="Apa kamu yakin?" confirm-button="Ya, aku ingin keluar dari akunku!"
+                        cancel-button="Tidak">
                         @method('POST')
                         @csrf
                         <button type="submit"

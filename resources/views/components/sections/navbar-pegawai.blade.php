@@ -6,9 +6,14 @@
         </div>
         <div class="p-1 pr-4 flex gap-4 items-center ">
             <p class="text-lg flex">{{ auth()->user()->nama }} | <span class="hidden md:flex"> |
-                    ({{ auth()->user()->email }})</span></p>
+                    ({{ auth()->user()->username }})</span></p>
             <div class="rounded-full size-9 overflow-hidden bg-white">
-                <img src="{{ asset('user.png') }}" alt="Gambar Profile" class="size-full">
+                @if (auth()->user()->avatar_url)
+                    <img src="{{ Storage::url('/avatars/' . auth()->user()->avatar_url) }}" alt="Gambar Profile"
+                        class="size-full object-cover">
+                @else
+                    <img src="{{ asset('user.png') }}" alt="Gambar Profile" class="size-full object-cover">
+                @endif
             </div>
         </div>
     </div>
@@ -57,8 +62,8 @@
             <ul class="p-[27px] flex flex-col gap-3 text-[18px] ">
                 <li>
                     <x-splade-form action="{{ route('pegawai.logout') }}" method="post" confirm="Keluar?"
-                            confirm-text="Apa kamu yakin?" confirm-button="Ya, aku ingin keluar dari akunku!"
-                            cancel-button="Tidak">
+                        confirm-text="Apa kamu yakin?" confirm-button="Ya, aku ingin keluar dari akunku!"
+                        cancel-button="Tidak">
                         @method('POST')
                         @csrf
                         <button type="submit"

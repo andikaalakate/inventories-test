@@ -277,7 +277,7 @@ class SiswaController extends Controller
             ->success()
                 ->rightTop()
                 ->autoDismiss(5)
-                ->message('Barang Berhasil Dihapus!');
+                ->message('Siswa Berhasil Dihapus!');
 
             return redirect()->back();
         } catch (\Exception $e) {
@@ -287,7 +287,7 @@ class SiswaController extends Controller
                 ->danger()
                 ->rightTop()
                 ->autoDismiss(5)
-                ->message('Barang Gagal Dihapus!');
+                ->message('Siswa Gagal Dihapus!');
 
             return redirect()->back();
         }
