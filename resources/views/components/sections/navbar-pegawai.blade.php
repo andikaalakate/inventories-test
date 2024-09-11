@@ -58,6 +58,13 @@
                     <box-icon name='package' class="fill-white"></box-icon>Barang
                     </Link>
                 </li>
+                <li>
+                    <Link href="{{ route('pegawai.profile') }}"
+                        class="flex w-full h-full py-1 px-3 rounded-xl items-center gap-2 bg-[#3a3a3a]
+                        {{ request()->is('pegawai/profile*') ? 'border-2 border-slate-50' : '' }}">
+                    <box-icon name='user-circle' class="fill-white"></box-icon>Profil
+                    </Link>
+                </li>
             </ul>
             <ul class="p-[27px] flex flex-col gap-3 text-[18px] ">
                 <li>

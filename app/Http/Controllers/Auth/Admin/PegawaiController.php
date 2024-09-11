@@ -254,7 +254,7 @@ class PegawaiController extends Controller
                 ->autoDismiss(5)
                 ->message('Pegawai berhasil diperbarui');
 
-            return redirect()->route('admin.pegawai.list');
+            return redirect()->back();
         } catch (\Exception $e) {
             DB::rollBack();
 

@@ -12,6 +12,9 @@ Route::prefix('pegawai')->middleware(['auth:pegawai', 'auth.session'])->group(fu
     // Dasboard
     Route::get('/', [PegawaiDashboard::class, 'index'])->name('pegawai.dashboard');
 
+    // Profile
+    Route::get('/profile', [AuthController::class, 'pegawaiProfile'])->name('pegawai.profile');
+
     // Logout
     Route::post('/logout', [AuthController::class, 'pegawaiLogout'])->name('pegawai.logout');
 

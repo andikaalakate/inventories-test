@@ -232,7 +232,7 @@ class AdminController extends Controller
                 ->autoDismiss(5)
                 ->message('Admin berhasil diperbarui');
 
-            return redirect()->route('admin.user.list');
+            return redirect()->back();
         } catch (\Exception $e) {
             DB::rollBack();
 

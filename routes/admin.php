@@ -11,8 +11,11 @@ use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->middleware(['auth:admin', 'auth.session'])->group(function () {
-    // Dasboard
+    // Dashboard
     Route::get('/', [AdminDashboard::class, 'index'])->name('dashboard');
+    
+    // Profile
+    Route::get('/profile', [AuthController::class, 'adminProfile'])->name('profile');
 
     // Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

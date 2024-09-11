@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use ProtoneMedia\Splade\Facades\Toast;
+use ProtoneMedia\Splade\FileUploads\ExistingFile;
 
 class AuthController extends Controller
 {
@@ -75,6 +76,23 @@ class AuthController extends Controller
         return redirect()->intended('pegawai/login');
     }
 
+    public function pegawaiProfile()
+    {
+        $user = Auth::guard('pegawai')->user();
+
+        if ($user->avatar_url == null) {
+            $avatar = '';
+        } else {
+            $avatarPath = 'avatars/' . $user->avatar_url;
+            $user->avatar_url = $avatarPath;
+
+            $avatar =
+                ExistingFile::fromDisk('public')->get($avatarPath);
+        }
+
+        return view('auth.pegawai.profil', ['title' => 'Profile', 'akun' => $user, 'avatar' => $avatar]);
+    }
+
     /**
      * Handle an authentication attempt.
      */
@@ -120,6 +138,22 @@ class AuthController extends Controller
         }
 
         return redirect()->intended('admin/login');
+    }
+
+    public function adminProfile()
+    {
+        $user = Auth::guard('admin')->user();
+
+        if ($user->avatar_url == null) {
+            $avatar = '';
+        } else {
+            $avatarPath = 'avatars/' . $user->avatar_url;
+            $user->avatar_url = $avatarPath;
+
+            $avatar =
+                ExistingFile::fromDisk('public')->get($avatarPath);
+        }
+        return view('auth.admin.profil', ['title' => 'Profile', 'akun' => $user, 'avatar' => $avatar]);
     }
 
     /**

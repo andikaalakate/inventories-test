@@ -9,7 +9,7 @@
                     ({{ auth()->user()->username }})</span></p>
             <div class="rounded-full size-9 overflow-hidden bg-white">
                 @if (auth()->user()->avatar_url)
-                    <img src="{{ Storage::url('/avatars/' . auth()->user()->avatar_url) }}" alt="Gambar Profile"
+                    <img src="{{ Storage::url('avatars/' . auth()->user()->avatar_url) }}" alt="Gambar Profile"
                         class="size-full object-cover">
                 @else
                     <img src="{{ asset('user.png') }}" alt="Gambar Profile" class="size-full object-cover">
@@ -82,13 +82,13 @@
                     <box-icon name='user-pin' class="fill-white"></box-icon>Admin / Pengguna
                     </Link>
                 </li>
-                {{-- <li>
-                    <Link href="{{ route('admin.laporan') }}"
+                <li>
+                    <Link href="{{ route('profile') }}"
                         class="flex w-full h-full py-1 px-3 rounded-xl items-center gap-2 bg-[#3a3a3a]
-                        {{ request()->is('admin/laporan*') ? 'border-2 border-slate-50' : '' }}">
-                    <box-icon name='stats' class="fill-white"></box-icon>Laporan
+                        {{ request()->is('admin/profile*') ? 'border-2 border-slate-50' : '' }}">
+                    <box-icon name='user-circle' class="fill-white"></box-icon>Profil
                     </Link>
-                </li> --}}
+                </li>
             </ul>
             <ul class="p-[27px] flex flex-col gap-3 text-[18px] ">
                 <li>
