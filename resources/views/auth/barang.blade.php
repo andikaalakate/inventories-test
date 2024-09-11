@@ -74,11 +74,11 @@
                                     <div class="relative w-16 h-16">
                                         @if ($totalGambar > 0)
                                             <img src="{{ Storage::url($gambar[0]) }}" alt="Gambar utama"
-                                                class="w-full h-full rounded-full border-2 border-gray-50 object-cover absolute top-0 left-0 z-10">
+                                                class="w-full h-full z-0 rounded-full border-2 border-gray-50 object-cover absolute top-0 left-0">
 
                                             @if ($totalGambar > 1)
                                                 <img src="{{ Storage::url($gambar[1]) }}" alt="Gambar kedua"
-                                                    class="w-full h-full rounded-full border border-gray-50 object-cover absolute hidden md:flex top-0 left-10 z-20">
+                                                    class="w-full h-full rounded-full border border-gray-50 object-cover absolute hidden md:flex top-0 left-10 z-10">
                                             @endif
 
                                             @if ($totalGambar > 2)
@@ -89,7 +89,7 @@
                                             @endif
                                         @else
                                             <img src="{{ asset('path/to/default/image.png') }}" alt="Gambar default"
-                                                class="w-full h-full rounded-full border-2 border-gray-50 object-cover absolute top-0 left-0 z-10">
+                                                class="w-full h-full z-0 rounded-full border-2 border-gray-50 object-cover absolute top-0 left-0">
                                         @endif
                                     </div>
                                 </td>
@@ -112,8 +112,9 @@
                                             <Link href="{{ route('admin.barang.edit', $barang->nama) }}"
                                                 class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">
                                             Edit</Link>
-                                            <x-splade-form action="{{ route('admin.barang.destroy', $barang->id) }}"
-                                                method="DELETE">
+                                            <x-splade-form confirm="Konfirmasi" confirm-text="Apa kamu yakin?"
+                                                confirm-button="Ya, aku yakin!" cancel-button="Tidak"
+                                                action="{{ route('admin.barang.destroy', $barang->id) }}" method="DELETE">
                                                 @method('DELETE')
                                                 @csrf
                                                 <button type="submit"
@@ -139,15 +140,6 @@
         </div>
 
         <div class="flex justify-center w-full">
-            {{-- @if ($barangs->hasPages())
-                <x-pagination :paginator="$barangs"
-                    route="
-                @auth('admin')
-                    {{ route('admin.barang.list') }}
-                @endauth @auth('pegawai')
-                    {{ route('pegawai.barang.list') }}
-                @endauth" />
-            @endif --}}
             {{ $barangs->links() }}
         </div>
     </section>

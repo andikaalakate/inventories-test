@@ -8,9 +8,19 @@
     </section>
 
     <section class="p-6 my-4 mx-8 bg-[#2a2a2a] rounded-lg shadow-md">
-        <x-splade-form action="{{ route('admin.siswa.update', $siswa->id) }}" method="put" enctype="multipart/form-data"
-            class="grid grid-cols-1 lg:grid-cols-2 gap-6"
-            :default="[ 'nisn' => $siswa->nisn, 'nama' => $siswa->nama, 'jenis_kelamin' => $siswa->jenis_kelamin, 'kelas' => $siswa->kelas, 'jurusan' => $siswa->jurusan, 'tempat_lahir' => $siswa->tempat_lahir, 'tgl_lahir' => $siswa->tgl_lahir, 'alamat' => $siswa->alamat, 'no_hp' => $siswa->no_hp ]">
+        <x-splade-form confirm="Konfirmasi" confirm-text="Apa kamu yakin?" confirm-button="Ya, aku yakin!" cancel-button="Tidak"
+            action="{{ route('admin.siswa.update', $siswa->id) }}" method="put" enctype="multipart/form-data"
+            class="grid grid-cols-1 lg:grid-cols-2 gap-6" :default="[
+                'nisn' => $siswa->nisn,
+                'nama' => $siswa->nama,
+                'jenis_kelamin' => $siswa->jenis_kelamin,
+                'kelas' => $siswa->kelas,
+                'jurusan' => $siswa->jurusan,
+                'tempat_lahir' => $siswa->tempat_lahir,
+                'tgl_lahir' => $siswa->tgl_lahir,
+                'alamat' => $siswa->alamat,
+                'no_hp' => $siswa->no_hp,
+            ]">
             @csrf
             @method('PUT')
 
@@ -19,7 +29,7 @@
                 <label for="nisn" class="text-sm font-semibold py-2 text-white">NISN</label>
                 <input required
                     class="border border-[#3a3a3a] bg-[#4a4a4a] placeholder:text-gray-200 rounded-lg p-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    type="text" id="nisn" v-model="form.nisn" placeholder="Masukkan nisn siswa"/>
+                    type="text" id="nisn" v-model="form.nisn" placeholder="Masukkan nisn siswa" />
             </div>
 
             <!-- Nama Siswa -->
@@ -27,7 +37,7 @@
                 <label for="nama" class="text-sm font-semibold py-2 text-white">Nama Siswa</label>
                 <input required
                     class="border border-[#3a3a3a] bg-[#4a4a4a] placeholder:text-gray-200 rounded-lg p-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    type="text" id="nama" v-model="form.nama" placeholder="Masukkan nama siswa"/>
+                    type="text" id="nama" v-model="form.nama" placeholder="Masukkan nama siswa" />
             </div>
 
             <!-- Jenis Kelamin -->
@@ -72,7 +82,8 @@
                 <label for="tempat_lahir" class="text-sm font-semibold py-2 text-white">Tempat Lahir</label>
                 <input required
                     class="border border-[#3a3a3a] bg-[#4a4a4a] placeholder:text-gray-200 rounded-lg p-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    type="text" id="tempat_lahir" v-model="form.tempat_lahir" placeholder="Masukkan tempat lahir siswa" />
+                    type="text" id="tempat_lahir" v-model="form.tempat_lahir"
+                    placeholder="Masukkan tempat lahir siswa" />
             </div>
 
             <!-- Tanggal Lahir Siswa -->
@@ -80,7 +91,7 @@
                 <label for="tgl_lahir" class="text-sm font-semibold py-2 text-white">Tanggal Lahir</label>
                 <input required
                     class="border border-[#3a3a3a] bg-[#4a4a4a] placeholder:text-gray-200 rounded-lg p-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    type="date" id="tgl_lahir" v-model="form.tgl_lahir" placeholder="Masukkan tanggal lahir siswa"/>
+                    type="date" id="tgl_lahir" v-model="form.tgl_lahir" placeholder="Masukkan tanggal lahir siswa" />
             </div>
 
             <!-- Alamat Siswa -->
@@ -96,7 +107,7 @@
                 <label for="no_hp" class="text-sm font-semibold py-2 text-white">No HP Siswa</label>
                 <input required
                     class="border border-[#3a3a3a] bg-[#4a4a4a] placeholder:text-gray-200 rounded-lg p-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    type="text" maxlength="18" id="no_hp" v-model="form.no_hp" placeholder="Masukkan no hp siswa"/>
+                    type="text" maxlength="18" id="no_hp" v-model="form.no_hp" placeholder="Masukkan no hp siswa" />
             </div>
 
             <!-- Submit Button -->

@@ -53,11 +53,12 @@
                                 <td class="py-4 lg:px-16 sm:px-24 text-sm text-white">
                                     <div class="relative w-16 h-16">
                                         @if ($admin->avatar_url !== null)
-                                            <img src="{{ Storage::url('avatars/' . $admin->avatar_url) }}" alt="Gambar utama"
-                                                class="w-full h-full rounded-full border-2 border-gray-50 object-cover absolute top-0 left-0 z-10">
+                                            <img src="{{ Storage::url('avatars/' . $admin->avatar_url) }}"
+                                                alt="Gambar utama"
+                                                class="w-full h-full rounded-full border-2 border-gray-50 object-cover absolute top-0 left-0 z-0">
                                         @else
                                             <img src="{{ asset('path/to/default/image.png') }}" alt="Gambar default"
-                                                class="w-full h-full rounded-full border-2 border-gray-50 object-cover absolute top-0 left-0 z-10">
+                                                class="w-full h-full rounded-full border-2 border-gray-50 object-cover absolute top-0 left-0 z-0">
                                         @endif
                                     </div>
                                 </td>
@@ -72,8 +73,9 @@
                                         <Link href="{{ route('admin.user.edit', $admin->username) }}"
                                             class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">
                                         Edit</Link>
-                                        <x-splade-form action="{{ route('admin.user.destroy', $admin->id) }}"
-                                            method="delete">
+                                        <x-splade-form confirm="Konfirmasi" confirm-text="Apa kamu yakin?"
+                                            confirm-button="Ya, aku yakin!" cancel-button="Tidak"
+                                            action="{{ route('admin.user.destroy', $admin->id) }}" method="delete">
                                             @method('DELETE')
                                             @csrf
                                             <button type="submit"

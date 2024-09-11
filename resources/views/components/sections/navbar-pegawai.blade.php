@@ -68,9 +68,9 @@
             </ul>
             <ul class="p-[27px] flex flex-col gap-3 text-[18px] ">
                 <li>
-                    <x-splade-form action="{{ route('pegawai.logout') }}" method="post" confirm="Keluar?"
-                        confirm-text="Apa kamu yakin?" confirm-button="Ya, aku ingin keluar dari akunku!"
-                        cancel-button="Tidak">
+                    <x-splade-form confirm="Konfirmasi"
+                        confirm-text="Apa kamu yakin?" confirm-button="Ya, aku yakin!"
+                        cancel-button="Tidak" action="{{ route('pegawai.logout') }}" method="post">
                         @method('POST')
                         @csrf
                         <button type="submit"

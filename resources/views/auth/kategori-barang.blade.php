@@ -69,8 +69,9 @@
                                         <Link href="{{ route('admin.kategori.edit', $kategori->nama) }}"
                                             class="text-gray-50 bg-[#1a1a1a] rounded-md py-2 px-3 hover:bg-gray-50 hover:text-[#1a1a1a] transition-all duration-300">
                                         Edit</Link>
-                                        <x-splade-form action="{{ route('admin.kategori.destroy', $kategori->id) }}"
-                                            method="delete">
+                                        <x-splade-form confirm="Konfirmasi" confirm-text="Apa kamu yakin?"
+                                            confirm-button="Ya, aku yakin!" cancel-button="Tidak"
+                                            action="{{ route('admin.kategori.destroy', $kategori->id) }}" method="delete">
                                             @method('DELETE')
                                             @csrf
                                             <button type="submit"

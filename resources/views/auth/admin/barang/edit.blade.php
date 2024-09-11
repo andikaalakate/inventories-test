@@ -8,7 +8,8 @@
     </section>
 
     <section class="p-6 my-4 mx-8 bg-[#2a2a2a] rounded-lg shadow-md">
-        <x-splade-form action="{{ route('admin.barang.update', $barang->id) }}" method="put" enctype="multipart/form-data"
+        <x-splade-form confirm="Konfirmasi" confirm-text="Apa kamu yakin?" confirm-button="Ya, aku yakin!" cancel-button="Tidak"
+            action="{{ route('admin.barang.update', $barang->id) }}" method="put" enctype="multipart/form-data"
             :default="[
                 'nama' => $barang->nama,
                 'kategori_id' => $barang->kategori_id,

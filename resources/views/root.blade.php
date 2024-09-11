@@ -31,6 +31,44 @@
         }
     </style>
 
+    <style>
+        /* Matikan pemilihan teks */
+        body {
+            -webkit-user-select: none;
+            /* Safari */
+            -moz-user-select: none;
+            /* Firefox */
+            -ms-user-select: none;
+            /* Internet Explorer/Edge */
+            user-select: none;
+            /* Non-prefixed version, supported by most browsers */
+        }
+
+        /* Matikan drag elemen */
+        body {
+            -webkit-user-drag: none;
+            /* Safari */
+            user-drag: none;
+            /* Non-prefixed version, supported by modern browsers */
+        }
+    </style>
+
+    <script>
+        // Matikan klik kanan
+        document.addEventListener('contextmenu', function(event) {
+            event.preventDefault();
+        });
+
+        // Matikan drag and drop pada seluruh elemen
+        document.addEventListener('dragstart', function(event) {
+            event.preventDefault();
+        });
+
+        document.addEventListener('drop', function(event) {
+            event.preventDefault();
+        });
+    </script>
+
     @spladeHead
     @vite('resources/js/app.js')
 </head>

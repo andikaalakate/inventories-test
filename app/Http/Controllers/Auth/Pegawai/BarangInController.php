@@ -74,9 +74,14 @@ class BarangInController extends Controller
             ]));
 
             $barangIn->pegawai_id = Auth::user()->id;
-    
-            $barangIn->barang->incrementJumlah($barangIn->jumlah);
+            
+            $barang = $barangIn->barang;
+            $barang->incrementJumlah($barangIn->jumlah);
 
+            if ($barang->jumlah >= 1) {
+                $barang->status = 'tersedia';
+                $barang->save();
+            }
             $barangIn->save();
             DB::commit();
 

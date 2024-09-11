@@ -8,8 +8,8 @@
     </section>
 
     <section class="p-6 my-4 mx-8 bg-[#2a2a2a] rounded-lg shadow-md">
-        <x-splade-form action="{{ route('admin.barang.store') }}" method="post" enctype="multipart/form-data"
-        defaults="{'gambar': []}"
+        <x-splade-form confirm="Konfirmasi" confirm-text="Apa kamu yakin?" confirm-button="Ya, aku yakin!" cancel-button="Tidak"
+            action="{{ route('admin.barang.store') }}" method="post" enctype="multipart/form-data" defaults="{'gambar': []}"
             class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             @csrf
             @method('POST')
@@ -25,8 +25,8 @@
             <!-- Kategori -->
             <div class="flex flex-col">
                 <label for="kategori" class="text-sm font-semibold py-2 text-white">Kategori</label>
-                <x-splade-select v-model="form.kategori_id" id="kategori" required
-                    :options="$kategoris" option-value="id" option-label="nama" placeholder="Pilih Kategori">
+                <x-splade-select v-model="form.kategori_id" id="kategori" required :options="$kategoris" option-value="id"
+                    option-label="nama" placeholder="Pilih Kategori">
                 </x-splade-select>
             </div>
 
@@ -35,7 +35,8 @@
                 <label for="jumlah" class="text-sm font-semibold py-2 text-white">Jumlah</label>
                 <input required
                     class="border border-[#3a3a3a] bg-[#4a4a4a] placeholder:text-gray-200 rounded-lg p-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    type="number" id="jumlah" min="0" step="1" max="100" value="1" v-model="form.jumlah" placeholder="Masukkan jumlah barang">
+                    type="number" id="jumlah" min="0" step="1" max="100" value="1"
+                    v-model="form.jumlah" placeholder="Masukkan jumlah barang">
             </div>
 
             <!-- Deskripsi -->
@@ -54,7 +55,9 @@
             <!-- Status -->
             <div class="flex flex-col">
                 <label for="status" class="text-sm font-semibold py-2 text-white">Status</label>
-                <input type="text" readonly class="border border-[#3a3a3a] bg-[#4a4a4a] placeholder:text-gray-200 rounded-lg p-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500 capitalize" :value="form.jumlah > 0 ? 'Tersedia' : 'Habis'" />
+                <input type="text" readonly
+                    class="border border-[#3a3a3a] bg-[#4a4a4a] placeholder:text-gray-200 rounded-lg p-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500 capitalize"
+                    :value="form.jumlah > 0 ? 'Tersedia' : 'Habis'" />
             </div>
 
             <!-- Submit Button -->

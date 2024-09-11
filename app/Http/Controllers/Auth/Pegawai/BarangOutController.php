@@ -56,7 +56,7 @@ class BarangOutController extends Controller
 
             foreach ($errors as $error) {
                 Toast::title('Error!')
-                    ->warning()
+                ->warning()
                     ->rightTop()
                     ->autoDismiss(5)
                     ->message($error);
@@ -75,7 +75,13 @@ class BarangOutController extends Controller
 
             $barangOut->pegawai_id = Auth::user()->id;
 
-            $barangOut->barang->decrementJumlah($barangOut->jumlah);
+            $barang = $barangOut->barang;
+            $barang->decrementJumlah($barangOut->jumlah);
+
+            if ($barang->jumlah <= 0) {
+                $barang->status = 'habis';
+                $barang->save();
+            }
 
             $barangOut->save();
             DB::commit();
@@ -91,7 +97,7 @@ class BarangOutController extends Controller
             DB::rollBack();
 
             Toast::title('Error!')
-                ->danger()
+            ->danger()
                 ->rightTop()
                 ->autoDismiss(5)
                 ->message('Barang gagal dikeluarkan: ' . $e->getMessage());

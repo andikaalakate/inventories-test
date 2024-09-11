@@ -8,9 +8,9 @@
     </section>
 
     <section class="p-6 my-4 mx-8 bg-[#2a2a2a] rounded-lg shadow-md">
-        <x-splade-form action="{{ route('admin.user.update', $admin->id) }}" method="PUT" enctype="multipart/form-data"
-            class="grid grid-cols-1 lg:grid-cols-2 gap-6"
-            :default="[
+        <x-splade-form confirm="Konfirmasi" confirm-text="Apa kamu yakin?" confirm-button="Ya, aku yakin!" cancel-button="Tidak"
+            action="{{ route('admin.user.update', $admin->id) }}" method="PUT" enctype="multipart/form-data"
+            class="grid grid-cols-1 lg:grid-cols-2 gap-6" :default="[
                 'name' => $admin->name,
                 'username' => $admin->username,
                 'email' => $admin->email,
@@ -24,7 +24,7 @@
                 <label for="nama" class="text-sm font-semibold py-2 text-white">Nama</label>
                 <input required
                     class="border border-[#3a3a3a] bg-[#4a4a4a] placeholder:text-gray-200 rounded-lg p-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    type="text" id="nama" v-model="form.name" placeholder="Masukkan nama user"/>
+                    type="text" id="nama" v-model="form.name" placeholder="Masukkan nama user" />
             </div>
 
             <!-- Username user -->
@@ -32,7 +32,7 @@
                 <label for="username" class="text-sm font-semibold py-2 text-white">Username</label>
                 <input required
                     class="border border-[#3a3a3a] bg-[#4a4a4a] placeholder:text-gray-200 rounded-lg p-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    type="text" id="username" v-model="form.username" placeholder="Masukkan username user"/>
+                    type="text" id="username" v-model="form.username" placeholder="Masukkan username user" />
             </div>
 
             <!-- Kelas -->
@@ -40,13 +40,16 @@
                 <label for="email" class="text-sm font-semibold py-2 text-white">Email</label>
                 <input required
                     class="border border-[#3a3a3a] bg-[#4a4a4a] placeholder:text-gray-200 rounded-lg p-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    type="email" id="email" v-model="form.email" placeholder="Masukkan email user" inputmode="email"/>
+                    type="email" id="email" v-model="form.email" placeholder="Masukkan email user"
+                    inputmode="email" />
             </div>
 
             <!-- Avatar user -->
             <div class="flex flex-col">
                 <label for="avatar" class="text-sm font-semibold py-2 text-white">Avatar</label>
-                <x-splade-file name="avatar" id="avatar" filepond preview accept="image/*" />
+                <div class="max-w-52">
+                    <x-splade-file name="avatar" id="avatar" filepond="{ stylePanelLayout: 'circle', stylePanelAspectRatio: '1:1', styleButtonRemoveItemPosition: 'bottom, center' }" preview accept="image/*" />
+                </div>
             </div>
 
             <!-- Submit Button -->

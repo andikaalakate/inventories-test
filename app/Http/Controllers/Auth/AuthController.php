@@ -90,7 +90,11 @@ class AuthController extends Controller
                 ExistingFile::fromDisk('public')->get($avatarPath);
         }
 
-        return view('auth.pegawai.profil', ['title' => 'Profile', 'akun' => $user, 'avatar' => $avatar]);
+        return view('auth.pegawai.profil', [
+            'title' => 'Profile', 
+            'akun' => $user, 
+            'avatar' => $avatar
+        ]);
     }
 
     /**

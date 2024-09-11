@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\Pegawai\DashboardController as PegawaiDashboard;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\Admin\KategoriController;
 use App\Http\Controllers\Auth\Admin\BarangController;
+use App\Http\Controllers\Auth\Admin\PegawaiController;
 use App\Http\Controllers\Auth\Pegawai\BarangInController;
 use App\Http\Controllers\Auth\Pegawai\BarangOutController;
 use Illuminate\Support\Facades\Route;
@@ -14,6 +15,7 @@ Route::prefix('pegawai')->middleware(['auth:pegawai', 'auth.session'])->group(fu
 
     // Profile
     Route::get('/profile', [AuthController::class, 'pegawaiProfile'])->name('pegawai.profile');
+    Route::put('/profile/{id}/update', [PegawaiController::class, 'update'])->name('pegawai.update');
 
     // Logout
     Route::post('/logout', [AuthController::class, 'pegawaiLogout'])->name('pegawai.logout');
