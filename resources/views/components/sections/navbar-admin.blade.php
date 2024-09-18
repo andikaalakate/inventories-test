@@ -62,6 +62,13 @@
                     </Link>
                 </li>
                 <li>
+                    <Link href="{{ route('admin.laporan.index') }}"
+                        class="bg-[#3a3a3a] flex w-full h-full py-1 px-3 rounded-xl items-center gap-2  
+                        {{ request()->is('admin/laporan*') ? 'border-2 border-slate-50' : '' }}">
+                    <box-icon name='receipt' class="fill-white"></box-icon>Laporan
+                    </Link>
+                </li>
+                <li>
                     <Link href="{{ route('admin.pegawai.list') }}"
                         class="flex w-full h-full py-1 px-3 rounded-xl items-center gap-2 bg-[#3a3a3a]
                         {{ request()->is('admin/pegawai*') ? 'border-2 border-slate-50' : '' }}">

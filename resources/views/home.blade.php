@@ -3,31 +3,22 @@
 </header>
 <nav class="bg-red-700 sticky top-0 z-50 shadow-lg">
     <ul class="flex justify-center gap-10 text-xl text-white p-4 transition-all duration-300">
-        <li><a href="#"
-                class="hover:underline hover:bg-white hover:text-red-700 hover:rounded-md hover:px-3 hover:py-2 transition-all">Home</a>
+        <li><a href="{{ route('login') }}"
+                class="hover:underline hover:bg-white hover:text-red-700 hover:rounded-md hover:px-3 hover:py-2 transition-all">Admin</a>
         </li>
-        <li><a href="#"
-                class="hover:underline hover:bg-white hover:text-red-700 hover:rounded-md hover:px-3 hover:py-2 transition-all">Profil</a>
-        </li>
-        <li><a href="#"
-                class="hover:underline hover:bg-white hover:text-red-700 hover:rounded-md hover:px-3 hover:py-2 transition-all">Kontak</a>
-        </li>
-        <li><a href="#"
-                class="hover:underline hover:bg-white hover:text-red-700 hover:rounded-md hover:px-3 hover:py-2 transition-all">Daftar</a>
-        </li>
-        <li><a href="#"
-                class="hover:underline hover:bg-white hover:text-red-700 hover:rounded-md hover:px-3 hover:py-2 transition-all">Masuk</a>
+        <li><a href="{{ route('pegawai.login') }}"
+                class="hover:underline hover:bg-white hover:text-red-700 hover:rounded-md hover:px-3 hover:py-2 transition-all">Pegawai</a>
         </li>
     </ul>
 </nav>
 
-<main class="p-4">
+<main class="p-4 min-h-full">
     <section class="my-8">
         <header class="text-center mb-6">
-            <h2 class="text-3xl font-bold">INI BARANG!</h2>
+            <h2 class="text-3xl font-bold">BARANG</h2>
         </header>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            @foreach ($barangs as $data)
+        @forelse ($barangs as $data)
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <article class="bg-white rounded-md border border-gray-300 shadow-md p-4">
                     <header class="bg-red-400 text-white text-xl p-4 rounded-t-md">
                         <h3>{{ $data->nama }}</h3>
@@ -59,26 +50,15 @@
                         <p>Status: {{ $data->status }}</p>
                     </figcaption>
                 </article>
-            @endforeach
-        </div>
-    </section>
-
-    <section class="my-8">
-        <header class="text-center mb-6">
-            <h2 class="text-3xl font-bold">INI GAMBARRR!</h2>
-        </header>
-        <div class="flex justify-center">
-            <figure class="bg-white p-4 rounded-md shadow-md">
-                <img class="w-full h-96 object-cover rounded-md" src="image.jpg" alt="Deskripsi gambar">
-                <figcaption class="text-center mt-4">
-                    <h3 class="text-xl font-bold">Ini Gambar</h3>
-                    <p>Nganu</p>
-                </figcaption>
-            </figure>
-        </div>
+            </div>
+        @empty
+            <div class="my-8 py-8">
+                <p class="text-xl text-center">Belum ada barang yang tersedia</p>
+            </div>
+        @endforelse
     </section>
 </main>
 
-<footer class="bg-gray-800 text-white p-4 text-center">
+<footer class="bg-gray-800 text-white p-4 text-center relative bottom-0 w-full">
     <p>&copy; 2024 SMK SWASTA JAMBI MEDAN. All rights reserved.</p>
 </footer>

@@ -57,7 +57,7 @@
                                                 alt="Gambar utama"
                                                 class="w-full h-full rounded-full border-2 border-gray-50 object-cover absolute top-0 left-0 z-0">
                                         @else
-                                            <img src="{{ asset('path/to/default/image.png') }}" alt="Gambar default"
+                                            <img src="{{ asset('user.png') }}" alt="Gambar default"
                                                 class="w-full h-full rounded-full border-2 border-gray-50 object-cover absolute top-0 left-0 z-0">
                                         @endif
                                     </div>

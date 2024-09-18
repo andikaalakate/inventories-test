@@ -97,7 +97,9 @@ class PegawaiController extends Controller
 
             $pegawai = new Pegawai($request->only('username', 'nama', 'email', 'jenis_kelamin', 'jabatan', 'alamat', 'no_hp'));
 
-            $pegawai->password = bcrypt($request->password);
+            if ($request->filled('password')) {
+                $pegawai->password = Hash::make($request->password);
+            }
 
             if ($request->hasFile('avatar')) {
                 $file = $request->file('avatar');

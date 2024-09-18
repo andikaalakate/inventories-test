@@ -86,7 +86,10 @@ Route::prefix('admin')->middleware(['auth:admin', 'auth.session'])->group(functi
     ]);
 
     // Laporan
-    Route::get('/laporan', [LaporanController::class, 'index'])->name('admin.laporan');
+    Route::name('admin.laporan.')->prefix('laporan')->group(function () {
+        Route::get('/', [LaporanController::class, 'index'])->name('index');
+        Route::get('/{laporan}', [LaporanController::class, 'cetak'])->name('cetak');
+    });
 
     // Delete Image Barang
     Route::delete('/barang/{barangId}/delete-image/{index}', [BarangController::class, 'deleteImage'])->name('barang.deleteImage');

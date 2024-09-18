@@ -144,6 +144,7 @@ class AuthController extends Controller
         return redirect()->intended('admin/login');
     }
 
+
     public function adminProfile()
     {
         $user = Auth::guard('admin')->user();
